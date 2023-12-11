@@ -1,4 +1,5 @@
 using HotelReservationService;
+using HotelReservationService.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDBContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnectionString")));
+builder.Services.AddTransient<CustomerService>();
+builder.Services.AddTransient<AddressService>();
+builder.Services.AddTransient<HotelService>();
 
 var app = builder.Build();
 app.UseSwagger();
@@ -25,11 +29,13 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+AppDBInitializer.Seed(app);
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
 
-app.MapFallbackToFile("index.html"); ;
+//app.MapFallbackToFile("index.html"); ;
+
 
 app.Run();

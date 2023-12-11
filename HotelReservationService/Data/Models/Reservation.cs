@@ -11,7 +11,7 @@
         public virtual Room Room { get; set; }
         //Foreign Key
         public int ReviewId { get; set; }
-        public virtual Review Review { get; set; }
+        public virtual Review? Review { get; set; }
         public int Total_Guest_Number { get; set; }
         public DateTime CheckInDate { get; set; }
         public DateTime CheckOutDate { get; set;}
