@@ -1,0 +1,70 @@
+.search{
+    border: none 1px gray;
+    border-radius: 10px;
+    margin: 10px;
+    padding: 10px;
+}
+.search_hotel {
+    border-style: none;
+    border-radius: 5px;
+    background-color: white;
+    font-size: 20px;
+    width: 20%;
+    text-align: left;
+}
+
+.check_in {
+    border-style: none;
+    border-radius: 5px;
+    background-color: white;
+    font-size: 20px;
+    width: 20%;
+    text-align: left;
+}
+
+.check_out {
+    border-style: none;
+    border-radius: 5px;
+    background-color:white;
+    font-size: 20px;
+    width: 20%;
+    text-align: left;
+}
+
+.guest_room {
+    border-style: none;
+    border-radius: 5px;
+    background-color:white;
+    font-size: 20px;
+    width: 20%;
+    text-align: left;
+}
+
+.search_button{
+    border-style: none;
+    border-radius: 5px;
+    background-color:rgb(92, 139, 226);
+    color: white;
+    font-size: 20px;
+    width: 10%;
+    text-align: center;
+    float: right;
+}
+
+
+
+.search_hotel:hover{
+    background-color: rgb(236, 236, 236);
+}
+.check_in:hover{
+    background-color: rgb(236, 236, 236);
+}
+.check_out:hover{
+    background-color: rgb(236, 236, 236);
+}
+.guest_room:hover{
+    background-color: rgb(236, 236, 236);
+}  
+.search_button:hover{
+    background-color: rgb(50, 112, 228);
+}  

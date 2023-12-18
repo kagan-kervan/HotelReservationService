@@ -1,0 +1,32 @@
+.navbar{
+    height: 50px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    border-bottom-style: none;
+    border-width: 1px;
+    border-color: rgb(68, 68, 68);
+  }
+  
+  .navContainer{
+    width: 100%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+ .home{
+  color: orange;
+  text-decoration: none;
+  font-family:Verdana, Geneva, Tahoma, sans-serif
+ }
+
+ .login{
+  float: right;
+  border-radius: 10px;
+  background-color: white;
+  font-family:Verdana, Geneva, Tahoma, sans-serif
+ }
+
+  
