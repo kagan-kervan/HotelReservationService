@@ -17,12 +17,14 @@ namespace HotelReservationService.Controllers
         [HttpPost("add-hotel/{owner_id}/{address_id}")]
         public IActionResult AddHotel([FromBody]HotelVM hotelVM,int owner_id,int address_id)
         {
+            /*
             if(!hotelService.HasOwnerWithGivenID(owner_id))
             {
                 return BadRequest();
             }
             if(!hotelService.HasAddressWithGivenID(address_id))
                 return BadRequest();
+            */
             hotelService.AddHotel(hotelVM,owner_id,address_id);
             return(Ok());
         }
@@ -41,8 +43,10 @@ namespace HotelReservationService.Controllers
         [HttpGet("get-hotel-with-owner-id/{owner_id}")]
         public IActionResult GetHotelsFromOwnerID(int owner_id)
         {
+            /*
             if (!hotelService.HasOwnerWithGivenID(owner_id))
                 return BadRequest();
+            */
             var hotels = hotelService.GetHotelsFromOwnerID(owner_id);
             return Ok(hotels);
         }
@@ -55,8 +59,10 @@ namespace HotelReservationService.Controllers
         [HttpDelete("delete-owner-hotel/{owner_id}")]
         public IActionResult DeleteHotelsFromOwnerID(int owner_id)
         {
+            /*
             if (!hotelService.HasOwnerWithGivenID(owner_id))
                 return BadRequest();
+            */
             hotelService.DeleteHotelWithOwnerID(owner_id);
             return(Ok());
         }
@@ -64,6 +70,26 @@ namespace HotelReservationService.Controllers
         public IActionResult UpdateHotel(int id, [FromBody]HotelVM updatedHotel)
         {
             var hotel =hotelService.UpdateHotelWıthID(id,updatedHotel);
+            return (Ok(hotel));
+        }
+        [HttpPut("update-hotel-address/{id}/{address_id}")]
+        public IActionResult UpdateHotelAddress(int id, int address_id)
+        {
+            /*
+           if(!hotelService.HasAddressWithGivenID(address_id))
+                return BadRequest();
+            */
+           var hotel = hotelService.UpdateHotelAddress(id,address_id);
+            return (Ok(hotel));
+        }
+        [HttpPut("update-hotel-owner/{id}/{owner_id}")]
+        public IActionResult UpdateHotelOwner(int id, int owner_id)
+        {
+            /*
+            if (!hotelService.HasOwnerWithGivenID(owner_id))
+                return BadRequest();
+            */
+            var hotel = hotelService.UpdateHotelOwner(id,owner_id);
             return (Ok(hotel));
         }
     }

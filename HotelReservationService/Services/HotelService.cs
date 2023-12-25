@@ -1,14 +1,17 @@
 ﻿using HotelReservationService.Data.Models;
 using HotelReservationService.Data.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace HotelReservationService.Services
 {
     public class HotelService
     {
         AppDBContext dbContext;
-        public HotelService(AppDBContext dbContext)
+        private readonly TableRelationService tableRelationService;
+        public HotelService(AppDBContext dbContext, TableRelationService tableRelation)
         {
             this.dbContext = dbContext;
+            this.tableRelationService = tableRelation;
         }
 
         public void AddHotel(HotelVM hotelVM,int owner_id,int address_id)
@@ -26,18 +29,26 @@ namespace HotelReservationService.Services
         }
         public ICollection<Hotel> GetAllHotels() 
         { 
-            var allHotels = dbContext.Hotels.ToList();
+            var allHotels = dbContext.Hotels.Include(o => o.HotelOwner).Include(a => a.HotelAddress).ToList();
             return allHotels;
         }
-        public Hotel GetHotel(int id) {  return dbContext.Hotels.Find(id); }
+        public Hotel GetHotel(int id) 
+        {  
+            return dbContext.Hotels.Include(o => o.HotelOwner).Include(a => a.HotelAddress).SingleOrDefault( x => x.Id == id); 
+        }
         public ICollection<Hotel> GetHotelsFromOwnerID(int owner_id)
         {
-            var hotels = dbContext.Hotels.Where(s => s.HotelOwnerId == owner_id).ToList();
+            var hotels = dbContext.Hotels.Where(s => s.HotelOwnerId == owner_id).Include(o => o.HotelOwner).Include(a => a.HotelAddress).ToList();
             return hotels;
         }
         public void DeleteHotelWithID(int id)
         {
             var hotel = dbContext.Hotels.Find(id);
+            // If the hotel has any rooms.
+            if (tableRelationService.DoesHotelHaveAnyRooms(id))
+            {
+                tableRelationService.DeleteRoomsAttachedToHotel(id);
+            }
             if (hotel != null)
             {
                 dbContext.Hotels.Remove(hotel);
@@ -66,22 +77,25 @@ namespace HotelReservationService.Services
             dbContext.SaveChanges() ;
             return hotel;
         }
-
-        public bool HasOwnerWithGivenID(int owner_id)
+        public Hotel UpdateHotelAddress(int id, int new_address_id)
         {
-            var tempOwner = dbContext.Owners.Find(owner_id);
-            if(tempOwner != null)
+            var hotel = dbContext.Hotels.Find(id);
+            if(hotel != null)
             {
-                return true;
+                hotel.HotelAddressId = new_address_id;
+                dbContext.SaveChanges();
             }
-            return false;
+            return hotel;
         }
-        public bool HasAddressWithGivenID(int address_id) 
+        public Hotel UpdateHotelOwner(int id, int new_owner_id)
         {
-            var tempAddress = dbContext.Addresses.Find(address_id);
-            if(tempAddress != null)
-                return true;
-            return false;
+            var hotel = dbContext.Hotels.Find(id);
+            if (hotel != null)
+            {
+                hotel.HotelOwnerId = new_owner_id;
+                dbContext.SaveChanges();
+            }
+            return hotel;
         }
     }
 }

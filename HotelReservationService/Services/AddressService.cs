@@ -1,5 +1,7 @@
-﻿using HotelReservationService.Data.Models;
+﻿
+using HotelReservationService.Data.Models;
 using HotelReservationService.Data.ViewModels;
+using System.Net;
 
 namespace HotelReservationService.Services
 {
@@ -35,6 +37,14 @@ namespace HotelReservationService.Services
                 dbContext.Addresses.Remove(address);
                 dbContext.SaveChanges();
             }
+        }
+
+        public bool IsAddressHasHotel(int id)
+        {
+            var hotel = dbContext.Hotels.Where(h => h.HotelAddressId == id);
+            if(hotel != null)
+                return true;
+            return false;
         }
         public Address GetAddress(int id)
         {

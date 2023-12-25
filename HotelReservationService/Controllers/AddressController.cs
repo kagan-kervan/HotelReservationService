@@ -36,6 +36,11 @@ namespace HotelReservationService.Controllers
         [HttpDelete("delete-address/{id}")]
         public IActionResult DeleteAddress(int id)
         {
+            
+             if(AddressService.IsAddressHasHotel(id))
+            {
+                return BadRequest();
+            }
             AddressService.RemoveAddress(id);
             return Ok();
         }

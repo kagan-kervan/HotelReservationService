@@ -1,15 +1,20 @@
 ﻿using HotelReservationService.Data.Models;
 using HotelReservationService.Data.ViewModels;
+using Microsoft.CodeAnalysis;
+using System.Net.Http;
 using System.Net.Mail;
+using Microsoft.EntityFrameworkCore;
 
 namespace HotelReservationService.Services
 {
     public class CustomerService
     {
         AppDBContext dbContext;
-        public CustomerService(AppDBContext dbContext)
+        TableRelationService tableRelationService;
+        public CustomerService(AppDBContext dbContext, TableRelationService tableRelationService)
         {
             this.dbContext = dbContext;
+            this.tableRelationService = tableRelationService;
         }
 
         public void AddCustomer(CustomerVM customer)
@@ -56,9 +61,16 @@ namespace HotelReservationService.Services
             var customer = dbContext.Customers.FirstOrDefault(n => n.Id == id);
             if( customer != null )
             {
+                //Checks if the customer has any active reservations.
+                if (tableRelationService.DoesCustomerHaveAnyReservations(id))
+                {
+                    //Deletes all reservations that are attached to customer.
+                    tableRelationService.DeleteReservationWithCustomerID(customer.Id);
+                }
                 dbContext.Customers.Remove(customer);
                 dbContext.SaveChanges() ;
             }
         }
+        
     }
 }

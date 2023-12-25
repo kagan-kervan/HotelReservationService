@@ -4,7 +4,7 @@
     {
         public int Id {  get; set; }
         // Foreign Key 
-        public int HotelId { get; set; }
+        public int? HotelId { get; set; }
         // Navigation Property
         public virtual Hotel? Hotel { get; set; }
         public bool hasWifi { get; set; }
