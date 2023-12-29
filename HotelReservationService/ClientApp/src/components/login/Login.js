@@ -1,6 +1,7 @@
 // Login.js
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import './Login.css';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -24,12 +25,11 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div className='main'>
       {isLoggedIn ? (  
-        // burası anasayfa olarak degistirilecek
            window.location.href = '/'
       ) : (
-        <div>
+        <div className='login-container'>
           <h2>Giriş Yap</h2>
           <label>
             Kullanıcı Adı:
@@ -52,13 +52,11 @@ const Login = () => {
           <button onClick={handleLogin}>Giriş Yap</button>
           <p>
             Hesabınız yok mu?{' '}
-            <Link to="/register">Kayıt Ol</Link>
+
+            {/* REGİSTER LİNKİ EKLE */}
+            {/* <Link to="/Register">Kayıt Ol</Link> */}
+            <Link to="/Register"> <button type="button" className="btn btn-md btn-outline-danger">Kayıt Ol</button></Link>
           </p>
-          {isLoggedIn && (
-            <p>
-              Başarıyla giriş yaptınız! Şimdi <Link to="/navbar">navbar</Link> sayfasına gidin.
-            </p>
-          )}
         </div>
       )}
     </div>

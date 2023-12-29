@@ -1,16 +1,17 @@
-.main {
+.auth-form-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
 }
 
-.login-container {
-  border: 2px solid #ccc; /*Çerçeve rengi*/
+
+.register-form {
+  border: 2px solid #ccc; /* Çerçeve rengi */
   padding: 20px;
   border-radius: 8px; /* Çerçeve köşe yarıçapı */
   width: 600px; /* Çerçeve genişliği */
-  height: 400px;
+  background-color: #fff; /* Çerçeve arka plan rengi */
 }
 
 label {
@@ -25,7 +26,6 @@ input {
   box-sizing: border-box;
 }
 
-
 button {
   background-color: blue; /* Giriş Yap butonu rengi */
   color: white;
@@ -36,9 +36,9 @@ button {
 }
 
 button:hover {
-  background-color:rgb(79, 79, 248); /* Hover durumunda buton rengi */
+  background-color: rgb(79, 79, 248); /* Hover durumunda buton rengi */
 }
 
-p {
-  margin-top: 16px;
-}
+
+
+
