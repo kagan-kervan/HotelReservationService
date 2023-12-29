@@ -1,5 +1,7 @@
-﻿using HotelReservationService.Data.Models;
+﻿using HotelReservationService.Controllers;
+using HotelReservationService.Data.Models;
 using HotelReservationService.Data.ViewModels;
+using HotelReservationService.Services.Params;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelReservationService.Services
@@ -24,9 +26,29 @@ namespace HotelReservationService.Services
             _dbContext.Reservations.Add(reserv);
             _dbContext.SaveChanges();
         }
-        public ICollection<Reservation> GetReservations()
+        public ICollection<Reservation> GetReservations(ReservationControllerParams reservationParams)
         {
-            return _dbContext.Reservations.Include(c => c.Customer).Include(r => r.Room).ToList();
+            IQueryable<Reservation> query = _dbContext.Reservations;
+            if(reservationParams.customerIDFilter != null)
+            {
+                query = query.Where(x => x.CustomerId == reservationParams.customerIDFilter);
+            }
+            if(reservationParams.roomIDfilter != null)
+            {
+                query = query.Where(z => z.RoomId == reservationParams.roomIDfilter);
+            }
+            if(reservationParams.searchTime != null)
+            {
+                //Takes the bigger or equal to checkin date, smaller or equal in checkout date.
+                query = query.Where(x => x.CheckInDate <= reservationParams.searchTime && x.CheckOutDate >= reservationParams.searchTime);
+            }
+            int totalPages = (int) Math.Ceiling(query.Count()/(double)reservationParams.pageSize);
+            if (reservationParams.HasNextPage(totalPages))
+            {
+                query= query.Skip((reservationParams.pageIndex - 1) * reservationParams.pageSize).Take(reservationParams.pageSize);
+            }
+            query = query.Include(c => c.Customer).Include(r => r.Room).Include(z => z.Review);
+            return query.ToList();
         }
         public Reservation GetReservation(int reservation_id)
         {

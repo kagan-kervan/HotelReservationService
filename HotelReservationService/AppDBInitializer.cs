@@ -1,4 +1,5 @@
 ﻿using HotelReservationService.Data.Models;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace HotelReservationService
 {
@@ -9,6 +10,7 @@ namespace HotelReservationService
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetService<AppDBContext>();
+
                 if (!context.Customers.Any())
                 {
                     context.Customers.AddRange(new Customer()

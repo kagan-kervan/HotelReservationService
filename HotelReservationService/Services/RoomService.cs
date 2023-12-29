@@ -1,5 +1,6 @@
 ﻿using HotelReservationService.Data.Models;
 using HotelReservationService.Data.ViewModels;
+using HotelReservationService.Services.Params;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelReservationService.Services
@@ -25,10 +26,41 @@ namespace HotelReservationService.Services
             dbContext.Rooms.Add(tempRoom);
             dbContext.SaveChanges();
         }
-        public ICollection<Room> GetRooms()
+        public ICollection<Room> GetRooms(RoomControllerParameters roomParams)
         {
-            var list = dbContext.Rooms.Include(h => h.Hotel).Include(r => r.RoomType).ToList();
-            return list;
+            IQueryable<Room> queryable = dbContext.Rooms;
+            if (roomParams.hotelIDFilter != null)
+            {
+                queryable = queryable.Where(x => x.HotelId == roomParams.hotelIDFilter);
+            }
+            if(roomParams.typeIDFilter != null)
+            {
+                queryable = queryable.Where(x => x.RoomTypeId == roomParams.typeIDFilter);
+            }
+            switch (roomParams.sortingType)
+            {
+                case "nameAsc":
+                    queryable = queryable.OrderBy(x => x.RoomType.TypeName); 
+                    break;
+                case "nameDesc":
+                    queryable = queryable.OrderByDescending(z => z.RoomType.TypeName);
+                    break;
+                case "priceAsc":
+                    queryable = queryable.OrderBy(p => p.RoomType.Price); 
+                    break;
+                case "priceDesc":
+                    queryable = queryable.OrderByDescending(p => p.RoomType.Price);
+                    break;
+                default:
+                    queryable = queryable.OrderBy(x => x.Id); break;
+            }
+            queryable = queryable.Include(x => x.Hotel).Include(y => y.RoomType);
+            int totalPages = (int)Math.Ceiling(queryable.Count() / (double)roomParams.pageSize);
+            if (roomParams.HasNextPage(totalPages))
+            {
+                queryable = queryable.Skip((roomParams.pageIndex - 1) * roomParams.pageSize).Take(roomParams.pageSize);
+            }
+            return queryable.ToList();
         }
         public Room GetRoom(int id) 
         { 

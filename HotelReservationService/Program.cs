@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;using Microsoft.AspNetCore.Http;
 using JavaScriptEngineSwitcher.V8;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using React.AspNet;
+using EntityFrameworkCore.UseRowNumberForPaging;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,7 +23,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDBContext>(options => options.UseSqlServer(
-    builder.Configuration.GetConnectionString("DefaultConnectionString")));
+    builder.Configuration.GetConnectionString("DefaultConnectionString"), o => o.UseRowNumberForPaging()));
 builder.Services.AddTransient<CustomerService>();
 builder.Services.AddLazyTransient<CustomerService, CustomerService>();
 builder.Services.AddTransient<AddressService>();
@@ -37,11 +38,19 @@ builder.Services.AddTransient<ReservationService>();
 builder.Services.AddLazyTransient<ReservationService, ReservationService>();
 builder.Services.AddTransient<OwnerService>();
 builder.Services.AddLazyTransient<OwnerService, OwnerService>();
+builder.Services.AddTransient<ReviewService>();
 builder.Services.AddScoped<TableRelationService>();
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy("CorsPolicy", policy =>
+    {
+        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:44491");
+    });
+});
 var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
-
+app.UseCors("CorsPolicy");
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -64,6 +73,7 @@ app.UseReact(config =>
 
 app.UseStaticFiles();
 app.UseRouting();
+app.UseAuthorization();
 AppDBInitializer.Seed(app);
 
 app.MapControllerRoute(

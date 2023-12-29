@@ -282,6 +282,7 @@ namespace HotelReservationService.Migrations
                 name: "IX_Rooms_RoomTypeId",
                 table: "Rooms",
                 column: "RoomTypeId");
+
         }
 
         /// <inheritdoc />

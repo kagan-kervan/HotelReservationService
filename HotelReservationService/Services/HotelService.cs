@@ -1,6 +1,7 @@
 ﻿using HotelReservationService.Data.Models;
 using HotelReservationService.Data.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace HotelReservationService.Services
 {
@@ -27,10 +28,52 @@ namespace HotelReservationService.Services
             dbContext.Hotels.Add(newHotel);
             dbContext.SaveChanges();
         }
-        public ICollection<Hotel> GetAllHotels() 
-        { 
-            var allHotels = dbContext.Hotels.Include(o => o.HotelOwner).Include(a => a.HotelAddress).ToList();
-            return allHotels;
+        public ICollection<Hotel> GetAllHotels(Params.HotelControllerParameters parameters) 
+        {
+            IQueryable<Hotel> hotelQuery = dbContext.Hotels;
+            //Filtering
+            if(parameters.ownerIDFilter != null)
+            {
+                hotelQuery = hotelQuery.Where(x => x.HotelOwnerId == parameters.ownerIDFilter);
+            }
+            if(parameters.addressIDFilter != null)
+            {
+                hotelQuery = hotelQuery.Where(x => x.HotelAddressId == parameters.addressIDFilter);
+            }
+            //Searching
+            if(parameters.searchWord != null) 
+            {
+                hotelQuery = hotelQuery.Where(x => x.HotelAddress.Country.Contains(parameters.searchWord) || 
+                x.HotelAddress.City.Contains(parameters.searchWord) || x.HotelName.Contains(parameters.searchWord));
+            }
+            //Sorting
+            switch(parameters.storingType)
+            {
+                case "nameAsc":
+                    hotelQuery = hotelQuery.OrderBy(x => x.HotelName);
+                    break;
+                case "nameDesc":
+                    hotelQuery = hotelQuery.OrderByDescending(x => x.HotelName);
+                    break;
+                case "reviewAsc":
+                    hotelQuery = hotelQuery.OrderBy(x => x.overall_score);
+                    break;
+                case "reviewDesc":
+                   hotelQuery = hotelQuery.OrderByDescending(x => x.overall_score);
+                    break;
+                default:
+                    break;
+
+            };
+            hotelQuery = hotelQuery.Include(o  => o.HotelOwner).Include(a => a.HotelAddress);
+            //Paging
+            int totalPages = (int) Math.Ceiling(hotelQuery.Count() / (double)parameters.pageSize);
+            if (parameters.HasNextPage(totalPages))
+            {
+                hotelQuery = hotelQuery.Skip((parameters.pageIndex - 1) * parameters.pageSize).Take(parameters.pageSize);
+            }
+            var list = hotelQuery.ToList();
+            return list;
         }
         public Hotel GetHotel(int id) 
         {  

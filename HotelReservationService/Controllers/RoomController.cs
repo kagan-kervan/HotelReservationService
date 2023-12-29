@@ -1,5 +1,6 @@
 ﻿using HotelReservationService.Data.ViewModels;
 using HotelReservationService.Services;
+using HotelReservationService.Services.Params;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Protocol;
@@ -15,10 +16,11 @@ namespace HotelReservationService.Controllers
         {
             this.roomService = roomService;
         }
-        [HttpGet("get-all")]
-        public IActionResult GetAll()
+        [HttpGet("get-rooms")]
+        public IActionResult GetRooms(String? sortingType,int?hotelIDfilter,int?typeIDfilter,int pageIndex,int? PageSize)
         {
-            var list = roomService.GetRooms();
+            RoomControllerParameters controllerParameters = new RoomControllerParameters(sortingType,hotelIDfilter,typeIDfilter,pageIndex,PageSize);
+            var list = roomService.GetRooms(controllerParameters);
             return Ok(list);
         }
         [HttpGet("get/{id}")]

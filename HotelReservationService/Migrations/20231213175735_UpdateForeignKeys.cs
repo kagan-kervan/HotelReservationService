@@ -180,6 +180,7 @@ namespace HotelReservationService.Migrations
                 column: "RoomTypeId",
                 principalTable: "RoomTypes",
                 principalColumn: "Id");
+
         }
 
         /// <inheritdoc />

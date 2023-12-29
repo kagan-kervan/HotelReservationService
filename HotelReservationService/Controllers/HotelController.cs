@@ -1,5 +1,6 @@
 ﻿using HotelReservationService.Data.ViewModels;
 using HotelReservationService.Services;
+using HotelReservationService.Services.Params;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,10 +29,11 @@ namespace HotelReservationService.Controllers
             hotelService.AddHotel(hotelVM,owner_id,address_id);
             return(Ok());
         }
-        [HttpGet("get-all-hotels")]
-        public IActionResult GetAllHotels()
+        [HttpGet("get-hotels")]
+        public IActionResult GetAllHotels(int? ownerIDFilter,int? addressIDFilter, string? sortingType, string? searchWord, int pageIndex, int? pageSize)
         {
-            var hotels = hotelService.GetAllHotels();
+            HotelControllerParameters parameters = new HotelControllerParameters(ownerIDFilter, addressIDFilter, sortingType,searchWord,pageIndex, pageSize);
+            var hotels = hotelService.GetAllHotels(parameters);
             return Ok(hotels);
         }
         [HttpGet("get-hotel-id/{id}")]
