@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
-import Navbar from './navbar/Navbar';
-import SearchBar from './searchbar/SearchBar';
-import HotelList from './hotelList/HotelList';
-import Footer from './footer/Footer';
-import Hotel from './hotel_page/Hotel';
+import Navbar from '../navbar/Navbar';
+import SearchBar from '../searchbar/SearchBar';
+import HotelList from '../hotelList/HotelList';
+import Footer from '../footer/Footer';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-import { Routes, Route, Link, NavLink } from 'react-router-dom';
 
-import Login from './login/Login';
-
-
+import Header from '../header/Header';
 
 class Main extends React.Component {
 
@@ -74,10 +70,14 @@ class Main extends React.Component {
             <div className='container'>
 
 
+              
+
                 <Navbar />
                 <hr></hr>
 
-                <SearchBar />
+                <Header />
+
+                {/* <SearchBar /> */}
 
                 <div className='row'><HotelList hotels={this.state.hotels} /></div>
                 <hr></hr>
@@ -85,7 +85,8 @@ class Main extends React.Component {
                 <Footer />
                 <hr></hr>
 
-                <Hotel />
+              
+
 
 
             </div>

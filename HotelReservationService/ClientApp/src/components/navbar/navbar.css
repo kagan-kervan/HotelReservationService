@@ -29,4 +29,7 @@
   font-family:Verdana, Geneva, Tahoma, sans-serif
  }
 
+ .btn btn-md btn-outline-danger:hover{
+  background-color: blue;
+ }
   
