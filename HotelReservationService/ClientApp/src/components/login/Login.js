@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Login.css';
+import axios, { formToJSON } from '../../../node_modules/axios/index';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -10,13 +11,24 @@ const Login = () => {
 
   const handleLogin = () => {
     // Burada gerçek bir kimlik doğrulama işlemi gerçekleştirilebilir.
-    // Ancak bu örnek için sadece kullanıcı adı ve şifre kontrolü yapılıyor.
+    // // // Ancak bu örnek için sadece kullanıcı adı ve şifre kontrolü yapılıyor.
     if (username === 'kullanici' && password === 'sifre') {
       setLoggedIn(true);
-    } else {
-      alert('Kullanıcı adı veya şifre hatalı!');
-    }
-  };
+     } else {
+       alert('Kullanıcı adı veya şifre hatalı!');
+      }
+
+    //POST EXAMPLE
+  //   axios.post("https://localhost:3000/api/Customer/add-customer",
+  //   {
+  // "name": "ReactTest",
+  // "surname": "Reacto",
+  // "email_Address": "reacting.com",
+  // "password": "reactg",
+  // "phone": "5554444222"
+  //   }).then(response => {console.log(response.data)}).catch(error => {console.error("error postin",error)});
+  
+}
 
   const handleLogout = () => {
     setLoggedIn(false);
@@ -62,5 +74,5 @@ const Login = () => {
     </div>
   );
 };
-
+ 
 export default Login;

@@ -4,9 +4,11 @@ import SearchBar from '../searchbar/SearchBar';
 import HotelList from '../hotelList/HotelList';
 import Footer from '../footer/Footer';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import axios from '../../../node_modules/axios/index';
+import { error } from 'jquery';
 
 
-import Header from '../header/Header';
+//import Header from '../header/Header';
 
 class Main extends React.Component {
 
@@ -61,7 +63,6 @@ class Main extends React.Component {
 
     }
 
-
     render() {
 
 
@@ -71,11 +72,11 @@ class Main extends React.Component {
 
 
               
+                
+                <Navbar />}
+                {/*<hr></hr>*/}
 
-                <Navbar />
-                <hr></hr>
-
-                <Header />
+                {/*<Header />*/}
 
                 {/* <SearchBar /> */}
 
