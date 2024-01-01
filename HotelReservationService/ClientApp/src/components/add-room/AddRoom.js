@@ -1,9 +1,10 @@
 import React, { useState,useEffect } from "react";
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import './AddRoom.css';
 import axios, { formToJSON } from '../../../node_modules/axios/index';
 
 export const AddRoom = (props) => {
+  const {ownerID} = useParams();
 const [roomNumber,setRoomNumber] = useState('');
 const [available,setAvailable] = useState('false');
 const [typeId,setTypeId] = useState('');
@@ -45,7 +46,7 @@ const fetchTypes = async () => {
   //Bunun yerine hotel id çekmek lazım
 const fetchHotels = async () => {
     try {
-      const response = await axios.get("https://localhost:3000/api/Hotel/get-hotels?pageIndex=2", { timeout: 5000 });
+      const response = await axios.get("https://localhost:3000/api/Hotel/get-hotel-with-owner-id/"+ownerID, { timeout: 5000 });
       setHotels(response.data);
     } catch (error) {
       console.error("Error fetching hotels:", error);

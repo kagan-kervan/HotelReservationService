@@ -87,7 +87,7 @@ const HandleSubmit = async (custID) => {
         <form className="reservation-form">
             <h2 style={{textAlign:"center"}}>ADD RESERVATION</h2>
             <label htmlFor="email">Email</label>
-            <input value={email} onChange={(e) => setMail(e.target.value)}type="email" placeholder="youremail@gmail.com" id="email" name="email" />
+            <input value={email} onChange={(e) => setMail(e.target.value)}type="email" placeholder="Please enter your account's mail" id="email" name="email" />
             <label htmlFor="total_guest">Total Guest</label>
             <input value={total_guest} onChange={(e) => setTotalGuest(e.target.value)} placeholder="Total Guest" id="total_guest"/>
             <div className='checkin-container'>

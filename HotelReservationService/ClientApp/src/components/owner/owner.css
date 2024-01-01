@@ -1,0 +1,44 @@
+.row{
+    padding: 10px;
+}
+.owner-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Adjust the height as needed */
+  }
+  
+  .hotel {
+    border: 1px solid #0313f7;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+  }
+.remove-button {
+    position: relative;
+    align-items: center;
+    background-color: #ff0000;
+    color: #fff;
+    padding: 20px;
+    cursor: pointer;
+    border-radius: 510px;
+}
+.add-button {
+    position: relative;
+    align-items: center;
+    background-color: #0026ff;
+    color: #fff;
+    padding: 20px;
+    cursor: pointer;
+    border-radius: 510px;
+}
+.update-button {
+    position: relative;
+    align-items: center;
+    background-color: #ff0000;
+    color: #fff;
+    padding: 20px;
+    cursor: pointer;
+    border-radius: 510px;
+}

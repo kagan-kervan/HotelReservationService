@@ -31,6 +31,7 @@ builder.Services.AddLazyTransient<AddressService, AddressService>();
 builder.Services.AddTransient<HotelService>();
 builder.Services.AddLazyTransient<HotelService, HotelService>();
 builder.Services.AddTransient<HotelFeaturesService>();
+builder.Services.AddLazyTransient<HotelFeaturesService, HotelFeaturesService>();
 builder.Services.AddTransient<RoomService>();
 builder.Services.AddLazyTransient<RoomService, RoomService>();
 builder.Services.AddTransient<RoomTypeService>();

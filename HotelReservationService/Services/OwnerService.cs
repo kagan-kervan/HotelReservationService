@@ -62,5 +62,12 @@ namespace HotelReservationService.Services
                 _dbContext.SaveChanges();
             }
         }
+
+        internal object GetOwnerWithMail(string email)
+        {
+            IQueryable<Owner> que = _dbContext.Owners;
+            que = que.Where(q => q.Email_Address == email);
+            return que.FirstOrDefault();
+        }
     }
 }

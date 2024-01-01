@@ -54,7 +54,7 @@ namespace HotelReservationService.Controllers
             var hotels = hotelService.GetHotelsFromOwnerID(owner_id);
             return Ok(hotels);
         }
-        [HttpDelete("delete-hotel/{hotel_id}")]
+        [HttpDelete("delete-hotel/{id}")]
         public IActionResult DeleteHotelFromID(int id)
         {
             hotelService.DeleteHotelWithID(id);

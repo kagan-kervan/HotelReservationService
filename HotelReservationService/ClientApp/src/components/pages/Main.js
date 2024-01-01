@@ -78,6 +78,31 @@ class Main extends React.Component {
       });
     }
   };
+handleSearch = async () => {
+    // Perform search based on this.state.searchQuery
+    // You can make a separate API call for search or filter the existing hotels list
+    // Update this.state.hotels accordingly
+    console.log("Searchin");
+    try {
+        const response = await axios.get(`/api/Hotel/get-hotels?searchWord=${this.state.searchQuery}&pageIndex=`+this.state.index);
+        const searchedHotels = response.data.map(hotel => ({
+            ...hotel,
+            images: [], // You can fetch and populate this array with images later
+        }));
+        this.setState({ hotels: searchedHotels });
+        searchedHotels.forEach(hotel => {
+          this.fetchPicturesForHotel(hotel.id);
+        });
+    } catch (error) {
+        console.error('Error searching hotels:', error);
+    }
+};
+
+handleSearchInputChange = (event) => {
+    console.log(this.state.searchQuery);
+    console.log(event);
+    this.setState({ searchQuery: event });
+};
 
 
     render() {
@@ -94,8 +119,10 @@ class Main extends React.Component {
                 {/*<hr></hr>*/}
 
                 {/*<Header />*/}
-
-                {/* <SearchBar /> */}
+                <SearchBar
+                    onSearchQueryChange={this.handleSearchInputChange}
+                    onSearch={this.handleSearch}
+                />
 
                 <div className='row'><HotelList hotels={this.state.hotels} fetchPicturesForHotel={this.fetchPicturesForHotel} /></div>
                 <button className='next-button' onClick={this.handleNextPage}>Next Page</button>

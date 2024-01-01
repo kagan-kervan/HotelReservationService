@@ -11,7 +11,8 @@ import Login from './login/Login';
 import Register from './login/Register';
 import Reservation from './pages/Reservation';
 import AddReservation from './add-reservation/AddReservation';
-
+import Customer from './customer/Customer';
+import GetOwner from './owner/Owner';
 
 class App extends React.Component{
    
@@ -28,10 +29,12 @@ class App extends React.Component{
                 <Route path='/register' element={<Register />} />  
                 <Route path='/reservation' element={<Reservation />} />
                 <Route path='/add-hotel' element={<AddHotel/>} />
-                <Route path='/add-room' element={<AddRoom/>} />
+                <Route path='/add-room/:ownerID' element={<AddRoom/>} />
                 <Route path='/add-room-type' element={<AddRoomType/>} />
                 <Route path='/add-address' element={<AddAddress/>} />
                 <Route path='/add-reservation/:hotelID' element={<AddReservation/>} />
+                <Route path='/customer-page/:customerID' element={<Customer/>} />
+                <Route path='/owner-page/:ownerID' element={<GetOwner/>} />
              </Routes>    
 
             </div>          

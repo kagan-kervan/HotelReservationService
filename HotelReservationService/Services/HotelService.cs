@@ -94,6 +94,7 @@ namespace HotelReservationService.Services
             {
                 tableRelationService.DeleteRoomsAttachedToHotel(id);
             }
+            tableRelationService.DeleteFeatureForGivenHotel(id);
             if (hotel != null)
             {
                 dbContext.Hotels.Remove(hotel);

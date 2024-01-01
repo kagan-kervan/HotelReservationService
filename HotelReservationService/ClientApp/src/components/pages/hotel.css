@@ -28,7 +28,7 @@
   }
   
   .hotelTitle {
-    font-size: 24px;
+    font-size: 30px;
   }
   
   .hotelAddress {
@@ -76,7 +76,7 @@
   }
   
   .hotelDesc {
-    font-size: 14px;
+    font-size: 20px;
     margin-top: 20px;
   }
   
@@ -127,6 +127,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  .hotelFeatures {
+    display: block;
+  }
+  
+  .hotelFeatures span {
+    align-items: center;
+    display: block;
+    margin-bottom: 10px; /* You can adjust the margin as needed for spacing */
   }
   
   .sliderImg{

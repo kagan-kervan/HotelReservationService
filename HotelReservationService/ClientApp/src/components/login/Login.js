@@ -1,30 +1,78 @@
 // Login.js
-import React, { useState } from 'react';
+import React, {createContext, useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Login.css';
 import axios, { formToJSON } from '../../../node_modules/axios/index';
+import { useNavigate } from 'react-router-dom';
 
+// const AuthContext = createContext();
+
+// export const AuthProvider = ({ children }) => {
+//   const [loggedIn, setLoggedIn] = useState(false);
+
+//   return (
+//     <AuthContext.Provider value={{ loggedIn, setLoggedIn }}>
+//       {children}
+//     </AuthContext.Provider>
+//   );
+// };
+
+// export const useAuth = () => {
+//   return useContext(AuthContext);
+// };
 const Login = () => {
+  const history = useNavigate();
   const [username, setUsername] = useState('');
+  const [userDetails, setUserDetails] = useState('{}');
   const [password, setPassword] = useState('');
+  const [accountType, setAccountType] = useState('customer'); // Default to 'customer'
   const [accountPassword, setaccountPassword] = useState('');
-  const [isLoggedIn, setLoggedIn] = useState(false);
+  const [isLoggedIn, setLoggedin] = useState(false);
 
-  const handleLogin = () => {
+  const handleLoginCustomer = () => {
     // Burada gerçek bir kimlik doğrulama işlemi gerçekleştirilebilir.
     // // // Ancak bu örnek için sadece kullanıcı adı ve şifre kontrolü yapılıyor.
-    axios.get("https://localhost:3000/api/Customer/get-customer?email="+username,{
+    if(accountType == 'customer'){
+      axios.get("https://localhost:3000/api/Customer/get-customer?email="+username,{
+        timeout: 10000,
+      })
+      .then(response =>
+        response.data
+      ).then((data) => {
+        console.log(data);   // Check if the necessary properties exist before accessing them
+        setUserDetails(data);
+        console.log(data)
+          setaccountPassword(data.password);
+          // If account password is working.
+          if (password === data.password) {
+            alert('Login Successfully!');
+            history('/customer-page/'+data.id);
+            setLoggedin(true);
+          } else {
+            alert('Kullanıcı adı veya şifre hatalı!');
+          }
+        }
+      ).catch(error => {
+        console.error('Error fetching customer data:', error);
+        // Handle error as needed
+      });
+    }
+    else{ 
+    axios.get("https://localhost:3000/api/Owner/get-with-mail?email="+username,{
       timeout: 10000,
     })
     .then(response =>
       response.data
     ).then((data) => {
       console.log(data);   // Check if the necessary properties exist before accessing them
+      setUserDetails(data);
       console.log(data.password)
         setaccountPassword(data.password);
         // If account password is working.
         if (password === data.password) {
-          setLoggedIn(true);
+          alert('Login Successfully!');
+          history('/owner-page/'+data.id);
+          setLoggedin(true);
         } else {
           alert('Kullanıcı adı veya şifre hatalı!');
         }
@@ -33,6 +81,7 @@ const Login = () => {
       console.error('Error fetching customer data:', error);
       // Handle error as needed
     });
+    }
     //POST EXAMPLE
   //   axios.post("https://localhost:3000/api/Customer/add-customer",
   //   {
@@ -46,7 +95,7 @@ const Login = () => {
 }
 
   const handleLogout = () => {
-    setLoggedIn(false);
+    setLoggedin(false);
     setUsername('');
     setPassword('');
   };
@@ -55,7 +104,8 @@ const Login = () => {
     <div className='main'>
       {isLoggedIn ? (  
            window.location.href = '/'
-      ) : (
+      ) 
+      : (
         <div className='login-container'>
           <h2>Giriş Yap</h2>
           <label>
@@ -76,7 +126,18 @@ const Login = () => {
             />
           </label>
           <br />
-          <button onClick={handleLogin}>Giriş Yap</button>
+          <label>
+            Hesap Türü:
+            <select
+              value={accountType}
+              onChange={(e) => setAccountType(e.target.value)}
+            >
+              <option value="customer">Kullanıcı</option>
+              <option value="owner">Sahip</option>
+            </select>
+          </label>
+          <br />
+          <button onClick={handleLoginCustomer}>Giriş Yap</button>
           <p>
             Hesabınız yok mu?{' '}
 

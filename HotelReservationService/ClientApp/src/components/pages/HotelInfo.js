@@ -20,17 +20,13 @@ const HotelInfo = () => {
   const [hotel,setHotel] = useState('');
   const [address,setAddress] = useState('');
   const [feature,setFeature] = useState('');
-  const [pics, setPics] = useState([]);
   const { hotelId } = useParams();
+  const [photos,setPhotos] = useState([]);
 
-  // state = {
-  //   pictures:[],
-  //   searchQuery: "",
-//}
   useEffect(() => {
   // Fetch owners and addresses when the component mounts
   fetchHotel(hotelId);
-  fetchAddress();
+  fetchAddress(hotel.hotelAddress);
   fetchFeature();
   fetchPics();
   console.log(address);
@@ -44,11 +40,11 @@ const HotelInfo = () => {
 
   const handleMove = (direction) => {
     let newSlideNumber;
-
+    const slideLength = photos.length;
     if (direction === "l") {
-      newSlideNumber = slideNumber === 0 ? 5 : slideNumber - 1;
+      newSlideNumber = slideNumber === 0 ? slideLength - 1 : slideNumber - 1;
     } else {
-      newSlideNumber = slideNumber === 5 ? 0 : slideNumber + 1;
+      newSlideNumber = slideNumber === slideLength - 1 ? 0 : slideNumber + 1;
     }
 
     setSlideNumber(newSlideNumber)
@@ -56,21 +52,16 @@ const HotelInfo = () => {
 
   const fetchHotel = async () => {
     console.log(hotelId);
-    const response = axios.get('/api/Hotel/get-hotel-id/'+hotelId, {
+    const response = await axios.get('/api/Hotel/get-hotel-id/'+hotelId, {
       timeout: 5000,
       withCredentials: true,
-    }).then(response => 
-      response.data
-    ).then(data => {
-     setHotel(data);
-     console.log(data);
-     console.log(hotel);
-     
     });
+    setHotel(response.data);
+    console.log(response.data);
   }
 
-  const fetchAddress = async () =>{
-    setAddress(hotel.hotelAddress);
+  const fetchAddress = async (htl) =>{
+    setAddress(htl);
   }
 
   const fetchFeature = async () =>
@@ -78,13 +69,8 @@ const HotelInfo = () => {
     const response = await axios.get('/api/Feature/Get-Feature-With-HotelID/'+hotelId, {
       timeout: 5000,
       withCredentials: true,
-    }).then(response => 
-      response.data
-    ).then(data => {
-     setFeature(data.value);
-     console.log(data);
-     console.log(feature);
     });
+    setFeature(response.data);
 
   }
 
@@ -92,13 +78,11 @@ const HotelInfo = () => {
     const response = await axios.get('/api/Picture/get-pictures/'+hotelId, {
       timeout: 5000,
       withCredentials: true,
-    }).then(response => 
-      response.data
-    ).then(data => {
-     setPics(data);
-     console.log(data);
-     console.log(pics);
     });
+    console.log(response);
+    setPhotos(response.data);
+
+
 
   }
 
@@ -120,7 +104,7 @@ const HotelInfo = () => {
               onClick={() => handleMove("l")}
             />
             <div className="sliderWrapper">
-              <img src={pics[0].pic_Url} alt="" className="sliderImg" />
+              <img src={photos[slideNumber].pic_Url} alt="" className="sliderImg" />
             </div>
             <FontAwesomeIcon
               icon={faCircleArrowRight}
@@ -140,39 +124,39 @@ const HotelInfo = () => {
           </span>
           )}
           </div>
-          <span className="hotelDistance">
-            Excellent location – 500m from center
-          </span>
-          <span className="hotelPriceHighlight">
-            Book a stay over $114 at this property and get a free airport taxi
-          </span>
           <div className="hotelImages">
-            {/* {photos.map((photo, i) => (
+             {photos.map((photo, i) => (
               <div className="hotelImgWrapper" key={i}>
                 <img
                   onClick={() => handleOpen(i)}
-                  src={photo.src}
+                  src={photo.pic_Url}
                   alt=""
                   className="hotelImg"
                 />
               </div>
-            ))} */}
+            ))}
           </div>
           <div className="hotelDetails">
             <div className="hotelDetailsTexts">
               <h1 className="hotelTitle">Stay in the heart of City</h1>
               <p className="hotelDesc">
-                Located a 5-minute walk from St. Florian's Gate in Krakow, Tower
-                Street Apartments has accommodations with air conditioning and
-                free WiFi. The units come with hardwood floors and feature a
-                fully equipped kitchenette with a microwave, a flat-screen TV,
-                and a private bathroom with shower and a hairdryer. A fridge is
-                also offered, as well as an electric tea pot and a coffee
-                machine. Popular points of interest near the apartment include
-                Cloth Hall, Main Market Square and Town Hall Tower. The nearest
-                airport is John Paul II International Kraków–Balice, 16.1 km
-                from Tower Street Apartments, and the property offers a paid
-                airport shuttle service.
+              {feature.description}
+              </p>
+              </div>
+              <div className="hotelFeaturesTexts">
+              <h2> <b>FEATURES</b></h2>
+              <p className="hotelFeatures">
+                  {feature.hasWifi && <span> <b>Wi-Fi</b>  </span>}
+                  {feature.hasParking && <span> <b>Parking</b>  </span>}
+                  {feature.hasPool && <span> <b>Pool </b> </span>}
+                  {feature.hasSpa && <span> <b>Spa</b>  </span>}
+                  {feature.hasAquapark && <span> <b>Aquapark </b> </span>}
+                  {feature.hasBeach && <span> <b>Beach</b>  </span>}
+                  {feature.hasBar && <span> <b>Bar</b>  </span>}
+                  {feature.hasParkingLot && <span> <b>Parking Lot </b> </span>}
+                  {feature.hasRoomService && <span> <b>Room Service</b>  </span>}
+                  {feature.hasRestaurant && <span> <b>Room Service</b>  </span>}
+                  {feature.hasBuffet && <span> <b>Buffet</b>  </span>}
               </p>
               <p className="hotelFeatures">
               </p>
@@ -180,7 +164,7 @@ const HotelInfo = () => {
             <div className="hotelDetailsPrice">
               <h1>Perfect for a 9-night stay!</h1>
               <span>
-                Located in the real heart of Krakow, this property has an
+                Located in the real heart of City, this property has an
                 excellent location score of 9.8!
               </span>
               <h2>

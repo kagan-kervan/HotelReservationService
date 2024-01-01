@@ -26,6 +26,12 @@ namespace HotelReservationService.Controllers
             var owner = ownerService.GetOwner(id);
             return Ok(owner);
         }
+        [HttpGet("get-with-mail")]
+        public IActionResult GetOwnerMail(string email)
+        {
+            var owner = ownerService.GetOwnerWithMail(email);
+            return Ok(owner);
+        }
         [HttpPost("add")]
         public IActionResult AddOwner([FromBody] OwnerVM ownerVM)
         {

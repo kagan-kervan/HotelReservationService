@@ -65,10 +65,6 @@ namespace HotelReservationService.Controllers
         [HttpDelete("Delete-Feature/{id}")]
         public IActionResult DeleteFeature(int id)
         {
-            if (hotelFeaturesService.IsFeatureHasAnyHotel(id))
-            {
-                return BadRequest();
-            }
             hotelFeaturesService.RemoveHotelFeatures(id);
             return Ok();
         }

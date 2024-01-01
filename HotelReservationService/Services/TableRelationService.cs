@@ -10,14 +10,16 @@ namespace HotelReservationService.Services
         private readonly Lazy<OwnerService> ownerService;
         private readonly Lazy<RoomService> roomService;
         private readonly Lazy<AddressService> addressService;
+        private readonly Lazy<HotelFeaturesService> featureService;
         public TableRelationService(Lazy<ReservationService> reservationService, Lazy<HotelService> hotelService, 
-           Lazy< OwnerService> ownerService,Lazy<RoomService> roomService, Lazy< AddressService> address)
+           Lazy<OwnerService> ownerService, Lazy<RoomService> roomService, Lazy<AddressService> address, Lazy<HotelFeaturesService> featureService)
         {
             this.reservationService = reservationService;
             this.hotelService = hotelService;
             this.ownerService = ownerService;
             this.roomService = roomService;
             this.addressService = address;
+            this.featureService = featureService;
         }
 
         //Checks if the owner has any hotel in hotel service class.
@@ -89,6 +91,11 @@ namespace HotelReservationService.Services
         public void DeleteRoomsAttachedToHotel(int hotel_id)
         {
             roomService.Value.RemoveRoomsWithHotelID(hotel_id);
+        }
+
+        public void DeleteFeatureForGivenHotel(int hotel_id)
+        {
+            featureService.Value.RemoveHotelFeaturesFromHotelID(hotel_id);
         }
     }
 

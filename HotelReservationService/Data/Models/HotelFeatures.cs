@@ -7,6 +7,7 @@
         public int? HotelId { get; set; }
         // Navigation Property
         public virtual Hotel? Hotel { get; set; }
+        public string? description { get; set; }
         public bool hasWifi { get; set; }
         public bool hasBeach {  get; set; }
         public bool hasSauna { get; set; }

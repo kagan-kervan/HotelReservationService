@@ -8,7 +8,10 @@ namespace HotelReservationService.Services
     public class HotelFeaturesService
     {
         private AppDBContext _dbContext;
-        public HotelFeaturesService(AppDBContext dbContext) {  _dbContext = dbContext; }
+        public HotelFeaturesService(AppDBContext dbContext) 
+        { 
+            _dbContext = dbContext; 
+        }
         public void AddHotelFeatures(int hotel_id, HotelFeaturesVM vm)
         {
             var hotelFeature = new HotelFeatures()
@@ -48,6 +51,23 @@ namespace HotelReservationService.Services
         public void RemoveHotelFeatures(int id)
         {
             var feature = _dbContext.Features.Find(id);
+            if(feature != null)
+            {
+
+                if (IsFeatureHasAnyHotel(id))
+                {
+                    IQueryable<Hotel> hotelQuery = _dbContext.Hotels.Where(x => x.Id == feature.HotelId);
+                   var hotel = hotelQuery.FirstOrDefault();
+                    if(hotel != null)
+                        _dbContext.Hotels.Remove(hotel);
+                }
+                _dbContext.Features.Remove(feature);
+                _dbContext.SaveChanges();
+            }
+        }
+        public void RemoveHotelFeaturesFromHotelID(int hotel_id)
+        {
+            var feature = _dbContext.Features.Where(x => x.HotelId == hotel_id).SingleOrDefault();
             if(feature != null)
             {
                 _dbContext.Features.Remove(feature);
