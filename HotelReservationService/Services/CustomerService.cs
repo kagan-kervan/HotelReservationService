@@ -71,6 +71,12 @@ namespace HotelReservationService.Services
                 dbContext.SaveChanges() ;
             }
         }
-        
+
+        public Customer GetCustomerByMail(string mail)
+        {
+            IQueryable<Customer> customers = dbContext.Customers;
+            customers = customers.Where(x => x.Email_Address == mail);
+            return customers.SingleOrDefault();
+        }
     }
 }

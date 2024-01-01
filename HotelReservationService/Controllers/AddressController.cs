@@ -21,7 +21,7 @@ namespace HotelReservationService.Controllers
             AddressService.AddAddress(AddressVM);
             return Ok();
         }
-        [HttpGet("get-all-addresses")]
+        [HttpGet("get-all")]
         public IActionResult GetAddresses() 
         {
             var addresses = AddressService.GetAddresses();

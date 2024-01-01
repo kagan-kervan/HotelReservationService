@@ -6,11 +6,11 @@
 }
 
 
-.register-form {
-  border: 2px solid #ccc; /* Çerçeve rengi */
+.add-form {
+  border: 2px solid #f7f7f7; /* Çerçeve rengi */
   padding: 20px;
   border-radius: 8px; /* Çerçeve köşe yarıçapı */
-  width: 600px; /* Çerçeve genişliği */
+  width: 900px; /* Çerçeve genişliği */
   background-color: #fff; /* Çerçeve arka plan rengi */
 }
 
@@ -27,8 +27,8 @@ input {
 }
 
 button {
-  background-color: red; /* Giriş Yap butonu rengi */
-  color: black;
+  background-color: blue; /* Giriş Yap butonu rengi */
+  color: white;
   padding: 10px;
   border: none;
   border-radius: 4px;

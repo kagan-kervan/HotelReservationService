@@ -7,17 +7,32 @@ import axios, { formToJSON } from '../../../node_modules/axios/index';
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [accountPassword, setaccountPassword] = useState('');
   const [isLoggedIn, setLoggedIn] = useState(false);
 
   const handleLogin = () => {
     // Burada gerçek bir kimlik doğrulama işlemi gerçekleştirilebilir.
     // // // Ancak bu örnek için sadece kullanıcı adı ve şifre kontrolü yapılıyor.
-    if (username === 'kullanici' && password === 'sifre') {
-      setLoggedIn(true);
-     } else {
-       alert('Kullanıcı adı veya şifre hatalı!');
+    axios.get("https://localhost:3000/api/Customer/get-customer?email="+username,{
+      timeout: 10000,
+    })
+    .then(response =>
+      response.data
+    ).then((data) => {
+      console.log(data);   // Check if the necessary properties exist before accessing them
+      console.log(data.password)
+        setaccountPassword(data.password);
+        // If account password is working.
+        if (password === data.password) {
+          setLoggedIn(true);
+        } else {
+          alert('Kullanıcı adı veya şifre hatalı!');
+        }
       }
-
+    ).catch(error => {
+      console.error('Error fetching customer data:', error);
+      // Handle error as needed
+    });
     //POST EXAMPLE
   //   axios.post("https://localhost:3000/api/Customer/add-customer",
   //   {

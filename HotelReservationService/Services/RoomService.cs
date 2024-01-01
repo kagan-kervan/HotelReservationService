@@ -68,8 +68,24 @@ namespace HotelReservationService.Services
         }
         public ICollection<Room> GetRoomsFromHotelID(int hotel_id)
         {
-            var list = dbContext.Rooms.Where(x => x.HotelId == hotel_id).Include(h => h.Hotel).Include(r => r.RoomType).ToList();
-            return list;
+            IQueryable<Room> query = dbContext.Rooms;
+            query = query.Where(x => x.HotelId == hotel_id);
+            query = query.Include(h => h.Hotel).Include(r => r.RoomType);
+            return query.ToList();
+        }public ICollection<Room> GetReservedRoomsFromHotelID(int hotel_id,DateTime? checkin,DateTime? checkout)
+        {
+            IQueryable<Room> query = dbContext.Rooms;
+            query = query.Where(x => x.HotelId == hotel_id);
+            if(checkin != null)
+            {// Get rooms that are reserved during the specified time period
+                var reservedRoomIds = dbContext.Reservations
+                    .Where(x => (x.CheckInDate >= checkin && x.CheckInDate <= checkout) ||
+                (x.CheckOutDate >= checkin && x.CheckOutDate <= checkout)).Select(y => y.RoomId).ToList();
+                // Exclude reserved rooms from the main query
+                query = query.Where(x => !reservedRoomIds.Contains(x.Id));
+            }
+            query = query.Include(h => h.Hotel).Include(r => r.RoomType);
+            return query.ToList();
         }
         public ICollection<Room> GetRoomsFromTypeID(int type_id)
         {

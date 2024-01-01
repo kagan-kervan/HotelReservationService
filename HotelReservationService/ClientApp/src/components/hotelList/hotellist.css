@@ -1,3 +1,23 @@
 .row{
     padding: 10px;
 }
+.next-button {
+    position: relative;
+    bottom: 20px;
+    right: -1200px;
+    background-color: #007bff;
+    color: #fff;
+    padding: 20px;
+    cursor: pointer;
+    border-radius: 510px;
+}
+.prev-button {
+    position: relative;
+    bottom: 20px;
+    right: 200px;
+    background-color: #007bff;
+    color: #fff;
+    padding: 20px;
+    cursor: pointer;
+    border-radius: 510px;
+}

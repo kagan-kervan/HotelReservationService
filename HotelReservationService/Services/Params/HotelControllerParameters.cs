@@ -32,7 +32,7 @@
         }
         public bool HasNextPage(int totalPages)
         {
-            return ((int)(pageIndex/pageSize) < totalPages);
+            return ((int)(pageIndex/pageSize) <= totalPages);
         }
     }
 }

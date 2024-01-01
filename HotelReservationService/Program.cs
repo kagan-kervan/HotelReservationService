@@ -39,12 +39,13 @@ builder.Services.AddLazyTransient<ReservationService, ReservationService>();
 builder.Services.AddTransient<OwnerService>();
 builder.Services.AddLazyTransient<OwnerService, OwnerService>();
 builder.Services.AddTransient<ReviewService>();
+builder.Services.AddTransient<PictureService>();
 builder.Services.AddScoped<TableRelationService>();
 builder.Services.AddCors(opt =>
 {
     opt.AddPolicy("CorsPolicy", policy =>
     {
-        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:3000");
+        policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
     });
 });
 var app = builder.Build();

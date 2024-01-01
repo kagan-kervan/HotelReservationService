@@ -13,55 +13,72 @@ import { error } from 'jquery';
 class Main extends React.Component {
 
     state = {
-        hotels: [
-            {
-                "id": 1,
-                "name": "Kosa Otel Cesme",
-                "rating": 8.8,
-                "overview": "This is a wider card with supporting text below as a natural lead-in to additional content.",
-                "imageURL": "https://imgcy.trivago.com/c_lfill,d_dummy.jpeg,e_sharpen:60,f_auto,h_240,q_auto,w_320//partnerimages/16/98/1698711658.jpeg"
-            },
-            {
-                "id": 2,
-                "name": "Unique Fethiye",
-                "rating": 9.6,
-                "overview": "This is a wider card with supporting text below as a natural lead-in to additional content.",
-                "imageURL": "https://imgcy.trivago.com/c_lfill,d_dummy.jpeg,e_sharpen:60,f_auto,h_240,q_auto,w_320//partnerimages/15/99/1599394608.jpeg"
-            },
-            {
-                "id": 3,
-                "name": "Melas Lara",
-                "rating": 9.4,
-                "overview": "This is a wider card with supporting text below as a natural lead-in to additional content.",
-                "imageURL": "https://imgcy.trivago.com/c_lfill,d_dummy.jpeg,e_sharpen:60,f_auto,h_240,q_auto,w_320//uploadimages/28/47/28476686.jpeg"
-            },
-            {
-                "id": 4,
-                "name": "The Beachfront Hotel",
-                "rating": 8.7,
-                "overview": "This is a wider card with supporting text below as a natural lead-in to additional content.",
-                "imageURL": "https://imgcy.trivago.com/c_lfill,d_dummy.jpeg,e_sharpen:60,f_auto,h_240,q_auto,w_320//partnerimages/16/07/1607248880.jpeg"
-            },
-            {
-                "id": 5,
-                "name": "Montana Pine Resort",
-                "rating": 9.2,
-                "overview": "This is a wider card with supporting text below as a natural lead-in to additional content.",
-                "imageURL": "https://imgcy.trivago.com/c_lfill,d_dummy.jpeg,e_sharpen:60,f_auto,h_240,q_auto,w_320//partnerimages/17/14/1714259638.jpeg"
-            },
-            {
-                "id": 6,
-                "name": "Baga Hotel Akyaka",
-                "rating": 8.6,
-                "overview": "This is a wider card with supporting text below as a natural lead-in to additional content.",
-                "imageURL": "https://imgcy.trivago.com/c_lfill,d_dummy.jpeg,e_sharpen:60,f_auto,h_240,q_auto,w_320//uploadimages/20/97/20976022.jpeg"
-            }
-
-        ],
-
+        hotels: [],
+        pictures:[],
         searchQuery: "",
+        index : 1,
 
     }
+    componentDidMount() {
+        // Backend'den otel verilerini çekme
+        this.fetchHotels();
+    }
+    fetchHotels = async () => {
+        try {
+            const constantPageSize = 10;
+            const response = await axios.get('/api/Hotel/get-hotels?pageIndex='+this.state.index+'&pageSize='+constantPageSize, {
+                timeout: 5000,
+                withCredentials: true,
+              });
+            // Assume each hotel has an "images" property, which is an array of image URLs
+            const hotelsWithImages = response.data.map(hotel => ({
+              ...hotel,
+              images: [], // You can fetch and populate this array with images later
+            }));
+            this.setState({ hotels: hotelsWithImages });
+            // Call fetchPicturesForHotel for each hotel
+            hotelsWithImages.forEach(hotel => {
+              this.fetchPicturesForHotel(hotel.id);
+            });
+      
+            console.log(hotelsWithImages);
+        } catch (error) {
+            console.error('Error fetching hotels:', error);
+        }
+    };
+
+// Add a function to fetch pictures (images) for a specific hotel
+    fetchPicturesForHotel = async (hotelId) => {
+    try {
+      const response = await axios.get(`/api/Picture/get-pictures/${hotelId}`);
+      const hotelIndex = this.state.hotels.findIndex(hotel => hotel.id === hotelId);
+  
+      if (hotelIndex !== -1) {
+        const updatedHotels = [...this.state.hotels];
+        updatedHotels[hotelIndex].images = response.data; // Assuming response.data is an array of image URLs
+        this.setState({ hotels: updatedHotels });
+      }
+    } catch (error) {
+      console.error(`Error fetching pictures for hotel ${hotelId}:`, error);
+    }
+  };
+
+  
+  handleNextPage = () => {
+    // Increment the index and fetch hotels for the next page
+    this.setState(prevState => ({ index: prevState.index + 1 }), () => {
+        this.fetchHotels();
+    });
+  };
+  handlePreviousPage = () => {
+    // Increment the index and fetch hotels for the next page
+    if (this.state.index > 1) {
+      this.setState(prevState => ({ index: prevState.index - 1 }), () => {
+          this.fetchHotels();
+      });
+    }
+  };
+
 
     render() {
 
@@ -73,16 +90,16 @@ class Main extends React.Component {
 
               
                 
-                <Navbar />}
+                <Navbar />
                 {/*<hr></hr>*/}
 
                 {/*<Header />*/}
 
                 {/* <SearchBar /> */}
 
-                <div className='row'><HotelList hotels={this.state.hotels} /></div>
-                <hr></hr>
-
+                <div className='row'><HotelList hotels={this.state.hotels} fetchPicturesForHotel={this.fetchPicturesForHotel} /></div>
+                <button className='next-button' onClick={this.handleNextPage}>Next Page</button>
+                <button className='prev-button' onClick={this.handlePreviousPage}>Previous Page</button>
                 <Footer />
                 <hr></hr>
 

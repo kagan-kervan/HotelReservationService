@@ -1,5 +1,8 @@
 import React from 'react';
+import React, { useState,useEffect } from "react";
 import './hotel.css'
+import { Link } from 'react-router-dom';
+import axios, { formToJSON } from '../../../node_modules/axios/index';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';

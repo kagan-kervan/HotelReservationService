@@ -3,10 +3,14 @@ import {Routes, Route, Link, NavLink} from 'react-router-dom';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import Main from './pages/Main';
 import HotelInfo from './pages/HotelInfo';
-
+import AddHotel from './add-hotel/AddHotel';
+import AddAddress from './add-hotel/AddAddress';
+import AddRoom from './add-room/AddRoom';
+import AddRoomType from './add-room/AddRoomType';
 import Login from './login/Login';
 import Register from './login/Register';
 import Reservation from './pages/Reservation';
+import AddReservation from './add-reservation/AddReservation';
 
 
 class App extends React.Component{
@@ -19,10 +23,15 @@ class App extends React.Component{
 
              <Routes>
                 <Route path='/' element={<Main />} />
-                <Route path='/hotel' element={<HotelInfo />} />
+                <Route path="/hotel/:hotelId" element={<HotelInfo/>} />
                 <Route path='/login' element={<Login />} />   
                 <Route path='/register' element={<Register />} />  
-                <Route path='/reservation' element={<Reservation />} />       
+                <Route path='/reservation' element={<Reservation />} />
+                <Route path='/add-hotel' element={<AddHotel/>} />
+                <Route path='/add-room' element={<AddRoom/>} />
+                <Route path='/add-room-type' element={<AddRoomType/>} />
+                <Route path='/add-address' element={<AddAddress/>} />
+                <Route path='/add-reservation/:hotelID' element={<AddReservation/>} />
              </Routes>    
 
             </div>          

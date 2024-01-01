@@ -15,7 +15,7 @@ namespace HotelReservationService.Services
             this.tableRelationService = tableRelation;
         }
 
-        public void AddHotel(HotelVM hotelVM,int owner_id,int address_id)
+        public Hotel AddHotel(HotelVM hotelVM,int owner_id,int address_id)
         {
             var newHotel = new Hotel()
             {
@@ -23,10 +23,11 @@ namespace HotelReservationService.Services
                 HotelAddressId = address_id,
                 HotelName = hotelVM.HotelName,
                 total_room_number = hotelVM.total_room_number,
-                full_room_number = hotelVM.full_room_number
+                full_room_number = (int?)hotelVM.full_room_number
             };
             dbContext.Hotels.Add(newHotel);
             dbContext.SaveChanges();
+            return newHotel;
         }
         public ICollection<Hotel> GetAllHotels(Params.HotelControllerParameters parameters) 
         {
@@ -68,6 +69,7 @@ namespace HotelReservationService.Services
             hotelQuery = hotelQuery.Include(o  => o.HotelOwner).Include(a => a.HotelAddress);
             //Paging
             int totalPages = (int) Math.Ceiling(hotelQuery.Count() / (double)parameters.pageSize);
+            parameters.pageIndex = Math.Min(totalPages, parameters.pageIndex);
             if (parameters.HasNextPage(totalPages))
             {
                 hotelQuery = hotelQuery.Skip((parameters.pageIndex - 1) * parameters.pageSize).Take(parameters.pageSize);

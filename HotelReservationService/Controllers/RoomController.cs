@@ -30,9 +30,17 @@ namespace HotelReservationService.Controllers
             return Ok(room);
         }
         [HttpGet("get-with-hotelID/{hotel_id}")]
-        public IActionResult GetRoomsWithHotelID(int hotel_id) 
+        public IActionResult GetRoomsWithHotelID(int hotel_id,DateTime? checkin, DateTime? checkout) 
         {
-            var rooms = roomService.GetRoomsFromHotelID(hotel_id);
+            if(checkin != null && checkin < DateTime.Now)
+            {
+                return BadRequest("Check in time is lower than today.");
+            }
+            var rooms = roomService.GetReservedRoomsFromHotelID(hotel_id,checkin,checkout);
+            if (!rooms.Any())
+            {
+                return NoContent();
+            }
             return Ok(rooms);
         }
         [HttpGet("get-with-typeID/{type_id}")]

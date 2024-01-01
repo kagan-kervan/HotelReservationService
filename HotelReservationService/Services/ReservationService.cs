@@ -3,6 +3,7 @@ using HotelReservationService.Data.Models;
 using HotelReservationService.Data.ViewModels;
 using HotelReservationService.Services.Params;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace HotelReservationService.Services
 {
@@ -13,7 +14,7 @@ namespace HotelReservationService.Services
         {
             _dbContext = dbContext;
         }
-        public void AddReservation(int room_id,int customer_id, ReservationVM reservationVM)
+        public Reservation AddReservation(int room_id,int customer_id, ReservationVM reservationVM)
         {
             var reserv = new Reservation()
             {
@@ -25,6 +26,7 @@ namespace HotelReservationService.Services
             };
             _dbContext.Reservations.Add(reserv);
             _dbContext.SaveChanges();
+            return reserv;
         }
         public ICollection<Reservation> GetReservations(ReservationControllerParams reservationParams)
         {
@@ -61,8 +63,9 @@ namespace HotelReservationService.Services
         }
         public ICollection<Reservation> GetReservationsFromRoomID(int room_id)
         {
-            var reservations = _dbContext.Reservations.Where(x => x.RoomId == room_id).Include(c => c.Customer).Include(r => r.Room).ToList();
-            return reservations;
+            IQueryable<Reservation> quer = _dbContext.Reservations;
+            quer = quer.Where(x => x.RoomId == room_id).Include(c => c.Customer).Include(r => r.Room);
+            return quer.ToList();
         }
         public ICollection<Reservation> GetReservationFromReviewId(int review_id)
         {

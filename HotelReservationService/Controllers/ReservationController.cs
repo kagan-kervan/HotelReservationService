@@ -50,8 +50,8 @@ namespace HotelReservationService.Controllers
         [HttpPost("add/{room_id}/{customer_id}")]
         public IActionResult Post(int room_id,int customer_id, [FromBody]ReservationVM reservationVM) 
         {
-            reservationService.AddReservation(room_id, customer_id, reservationVM);
-            return Ok();
+            var res = reservationService.AddReservation(room_id, customer_id, reservationVM);
+            return Ok(res);
         }
         [HttpDelete("delete/{id}")]
         public IActionResult Delete(int id)

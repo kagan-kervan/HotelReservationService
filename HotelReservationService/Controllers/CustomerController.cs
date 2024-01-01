@@ -32,6 +32,13 @@ namespace HotelReservationService.Controllers
             var customer = customerService.GetCustomerByID(id);
             return Ok(customer);
         }
+
+        [HttpGet("get-customer")]
+        public IActionResult GetCustomerWithMail(string email)
+        {
+            var customer = customerService.GetCustomerByMail(email);
+            return Ok(customer);
+        }
         [HttpPut("put/{id}")]
         public IActionResult UpdateCustomerByID(int id, [FromBody]CustomerVM customerVM)
         {

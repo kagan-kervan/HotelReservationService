@@ -26,8 +26,10 @@ namespace HotelReservationService.Controllers
             if(!hotelService.HasAddressWithGivenID(address_id))
                 return BadRequest();
             */
-            hotelService.AddHotel(hotelVM,owner_id,address_id);
-            return(Ok());
+            var htl = hotelService.AddHotel(hotelVM,owner_id,address_id);
+            if(htl != null)
+                return(Ok(htl));
+            return BadRequest("Failed to create hotel.");
         }
         [HttpGet("get-hotels")]
         public IActionResult GetAllHotels(int? ownerIDFilter,int? addressIDFilter, string? sortingType, string? searchWord, int pageIndex, int? pageSize)

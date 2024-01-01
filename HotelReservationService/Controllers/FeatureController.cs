@@ -14,7 +14,7 @@ namespace HotelReservationService.Controllers
         {
             this.hotelFeaturesService = hotelFeaturesService;
         }
-        [HttpPost("Add-Features/{hotel_id}")]
+        [HttpPost("add-features/{hotel_id}")]
         public IActionResult AddFeature(int hotel_id, [FromBody]HotelFeaturesVM features)
         {
             /*
