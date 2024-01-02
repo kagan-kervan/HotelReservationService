@@ -30,25 +30,28 @@ namespace HotelReservationService.Controllers
         public IActionResult GetFeature(int id) 
         { 
             var feature = hotelFeaturesService.GetFeaturesFromID(id);
-            return Ok(feature);
+            if(feature != null)
+            {
+                return Ok(feature);
+
+            }
+            return NotFound();
         }
         [HttpGet("Get-All-Features")]
         public IActionResult GetAllFeatures()
         {
             var features = hotelFeaturesService.GetHotelFeatures();
-            return Ok(features);
+            if(features.Any())
+                return Ok(features);
+            return NotFound();
         }
         [HttpGet("Get-Feature-With-HotelID/{hotel_id}")]
         public IActionResult GetFeaturesFromHotelID(int hotel_id)
         {
-            /*
-            if (!hotelFeaturesService.IsDBHasGivenHotelID(hotel_id))
-            {
-                return BadRequest();
-            }
-            */
             var feature = hotelFeaturesService.GetFeatureFromHotelID(hotel_id);
-            return Ok(feature);
+            if(feature != null)
+                return Ok(feature);
+            return NotFound();
         }
         [HttpPut("Update-Feature/{id}")]
         public IActionResult UpdateFeature(int id, [FromBody]HotelFeaturesVM featuresVM)

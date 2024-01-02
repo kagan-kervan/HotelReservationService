@@ -10,7 +10,7 @@ namespace HotelReservationService.Services
         {
             this.appDBContext = appDBContext;
         }
-        public void AddRoomType(RoomTypeVM roomTypeVM)
+        public RoomType AddRoomType(RoomTypeVM roomTypeVM)
         {
             var roomtype = new RoomType()
             {
@@ -21,6 +21,7 @@ namespace HotelReservationService.Services
             };
             appDBContext.RoomTypes.Add(roomtype);
             appDBContext.SaveChanges();
+            return roomtype;
         }
         public ICollection<RoomType> GetRoomTypes() 
         { 

@@ -17,27 +17,37 @@ namespace HotelReservationService.Controllers
         [HttpPost("add-customer")]
         public IActionResult AddCustomer([FromBody]CustomerVM customerVM)
         {
-            customerService.AddCustomer(customerVM);
-            return Ok();
+            var cust = customerService.AddCustomer(customerVM);
+            return Ok(cust);
         }
         [HttpGet("get/all")]
         public IActionResult GetAllCustomers()
         {
             var customers = customerService.GetAllCustomers();
+            if(!customers.Any()) // If empty
+            {
+                return NotFound();
+            }
             return Ok(customers);
         }
         [HttpGet("get/{id}")]
         public IActionResult GetCustomers(int id) 
         {
             var customer = customerService.GetCustomerByID(id);
-            return Ok(customer);
+            if(customer != null)
+            {
+                return Ok(customer);
+            }
+            return NotFound();
         }
 
         [HttpGet("get-customer")]
         public IActionResult GetCustomerWithMail(string email)
         {
             var customer = customerService.GetCustomerByMail(email);
-            return Ok(customer);
+            if(customer != null)
+                return Ok(customer);
+            return NotFound();
         }
         [HttpPut("put/{id}")]
         public IActionResult UpdateCustomerByID(int id, [FromBody]CustomerVM customerVM)

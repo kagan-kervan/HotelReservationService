@@ -13,7 +13,7 @@ namespace HotelReservationService.Services
                 this.dbContext = dbContext;
             }
 
-            public void AddAddress(AddressVM address)
+            public Address AddAddress(AddressVM address)
             {
                 var newAddress = new Address()
                 {
@@ -26,6 +26,7 @@ namespace HotelReservationService.Services
                 };
                 dbContext.Add(newAddress);
                 dbContext.SaveChanges();
+                return newAddress;
             }
         public void RemoveAddress(int id) 
         {

@@ -18,20 +18,27 @@ namespace HotelReservationService.Controllers
         [HttpPost("add-address")]
         public IActionResult AddAddress([FromBody] AddressVM AddressVM)
         {
-            AddressService.AddAddress(AddressVM);
-            return Ok();
+            var address = AddressService.AddAddress(AddressVM);
+            return Ok(address);
         }
         [HttpGet("get-all")]
         public IActionResult GetAddresses() 
         {
             var addresses = AddressService.GetAddresses();
-            return Ok(addresses);
+            if (addresses.Any()){
+                return Ok(addresses);
+            }
+            return NotFound();
         }
         [HttpGet("get-address/{id}")]
         public IActionResult GetAddressGivenID(int id)
         { 
             var address = AddressService.GetAddress(id);
-            return Ok(address);
+            if (address != null)
+            {
+                return Ok(address);
+            }
+            return BadRequest();
         }
         [HttpDelete("delete-address/{id}")]
         public IActionResult DeleteAddress(int id)

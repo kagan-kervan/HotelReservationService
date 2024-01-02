@@ -17,7 +17,7 @@ namespace HotelReservationService.Services
             this.tableRelationService = tableRelationService;
         }
 
-        public void AddCustomer(CustomerVM customer)
+        public Customer AddCustomer(CustomerVM customer)
         {
             var newCustomer = new Customer()
             {
@@ -29,6 +29,7 @@ namespace HotelReservationService.Services
             };
             dbContext.Add(newCustomer);
             dbContext.SaveChanges();
+            return newCustomer;
         }
 
         public ICollection<Customer> GetAllCustomers()

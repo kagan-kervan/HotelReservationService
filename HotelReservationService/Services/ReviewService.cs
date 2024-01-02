@@ -6,7 +6,7 @@ namespace HotelReservationService.Services
     {
         private AppDBContext _dbContext;
         public ReviewService(AppDBContext dbContext) {  _dbContext = dbContext; }
-        public void AddReview(string desc, int score,DateTime reviewTime)
+        public Review AddReview(string desc, int score,DateTime reviewTime)
         {
             var rev = new Review()
             {
@@ -16,6 +16,7 @@ namespace HotelReservationService.Services
             };
             _dbContext.Reviews.Add(rev);
             _dbContext.SaveChanges();
+            return rev;
         }
         public ICollection<Review> GetReviews()
         {

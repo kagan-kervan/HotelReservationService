@@ -1,0 +1,45 @@
+.auth-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  
+  .update-form {
+    border: 2px solid #ccc; /* Çerçeve rengi */
+    padding: 20px;
+    border-radius: 8px; /* Çerçeve köşe yarıçapı */
+    width: 600px; /* Çerçeve genişliği */
+    background-color: #fff; /* Çerçeve arka plan rengi */
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 8px;
+  }
+  
+  input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+  }
+  
+  button {
+    background-color: red; /* Giriş Yap butonu rengi */
+    color: black;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: rgb(79, 79, 248); /* Hover durumunda buton rengi */
+  }
+  
+  
+  
+  
+  

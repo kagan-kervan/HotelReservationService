@@ -17,13 +17,17 @@ namespace HotelReservationService.Controllers
         public IActionResult GetPictures(int hotel_id)
         {
             var list = pictureService.GetPictures(hotel_id);
-            return Ok(list);
+            if(list.Any())
+                return Ok(list);
+            return NotFound();
         }
         [HttpGet("get/{id}")]
         public IActionResult Get(int id)
         {
             var rev = pictureService.GetPicture(id);
-            return Ok(rev);
+            if(rev != null)
+                return Ok(rev);
+            return NotFound();
         }
         [HttpPost("add/{hotel_id}")]
         public IActionResult AddPicture(string url, int hotel_id)

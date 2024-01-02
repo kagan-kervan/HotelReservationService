@@ -36,13 +36,17 @@ namespace HotelReservationService.Controllers
         {
             HotelControllerParameters parameters = new HotelControllerParameters(ownerIDFilter, addressIDFilter, sortingType,searchWord,pageIndex, pageSize);
             var hotels = hotelService.GetAllHotels(parameters);
-            return Ok(hotels);
+            if(hotels.Any())
+                return Ok(hotels);
+            return NotFound();
         }
         [HttpGet("get-hotel-id/{id}")]
         public IActionResult GetHotelFromID(int id) 
         {
             var hotel = hotelService.GetHotel(id);
-            return Ok(hotel);
+            if(hotel != null)
+                return Ok(hotel);
+            return NotFound();
         }
         [HttpGet("get-hotel-with-owner-id/{owner_id}")]
         public IActionResult GetHotelsFromOwnerID(int owner_id)
@@ -52,7 +56,9 @@ namespace HotelReservationService.Controllers
                 return BadRequest();
             */
             var hotels = hotelService.GetHotelsFromOwnerID(owner_id);
-            return Ok(hotels);
+            if(hotels != null)
+                return Ok(hotels);
+            return NotFound() ;
         }
         [HttpDelete("delete-hotel/{id}")]
         public IActionResult DeleteHotelFromID(int id)

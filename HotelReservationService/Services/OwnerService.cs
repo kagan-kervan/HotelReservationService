@@ -12,7 +12,7 @@ namespace HotelReservationService.Services
             _dbContext = dbContext;
             _tableRelationService = tableRelationService;
         }
-        public void AddOwner(OwnerVM ownerVM)
+        public Owner AddOwner(OwnerVM ownerVM)
         {
             Owner owner1 = new Owner()
             {
@@ -24,6 +24,7 @@ namespace HotelReservationService.Services
             };
             _dbContext.Owners.Add(owner1);
             _dbContext.SaveChanges();
+            return owner1;
         }
         public ICollection<Owner> GetAll()
         {
@@ -49,7 +50,7 @@ namespace HotelReservationService.Services
                 _dbContext.SaveChanges();
             }
         }
-        public void UpdateOwner(int id, OwnerVM ownerVM)
+        public Owner UpdateOwner(int id, OwnerVM ownerVM)
         {
             var own = GetOwner(id);
             if(own != null)
@@ -61,6 +62,7 @@ namespace HotelReservationService.Services
                 own.Phone = ownerVM.Phone;
                 _dbContext.SaveChanges();
             }
+            return own;
         }
 
         internal object GetOwnerWithMail(string email)

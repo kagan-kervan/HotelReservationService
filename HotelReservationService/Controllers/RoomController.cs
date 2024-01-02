@@ -21,13 +21,17 @@ namespace HotelReservationService.Controllers
         {
             RoomControllerParameters controllerParameters = new RoomControllerParameters(sortingType,hotelIDfilter,typeIDfilter,pageIndex,PageSize);
             var list = roomService.GetRooms(controllerParameters);
-            return Ok(list);
+            if(list.Any()) 
+                return Ok(list);
+            return NotFound();
         }
         [HttpGet("get/{id}")]
         public IActionResult GetRoom(int id)
         {
             var room = roomService.GetRoom(id);
-            return Ok(room);
+            if(room != null)
+                return Ok(room);
+            return NotFound();
         }
         [HttpGet("get-with-hotelID/{hotel_id}")]
         public IActionResult GetRoomsWithHotelID(int hotel_id,DateTime? checkin, DateTime? checkout) 
@@ -47,13 +51,15 @@ namespace HotelReservationService.Controllers
         public IActionResult GetRoomsWithTypeID(int type_id)
         {
             var rooms = roomService.GetRoomsFromTypeID(type_id);
-            return Ok(rooms);
+            if(rooms.Any())
+                return Ok(rooms);
+            return NotFound();
         }
         [HttpPost("add/{hotel_id}/{roomtype_id}")]
         public IActionResult Post(int hotel_id,int roomtype_id, [FromBody]RoomVM roomVM) 
         {
-            roomService.AddRoom(hotel_id, roomtype_id,roomVM);
-            return Ok();
+            var room = roomService.AddRoom(hotel_id, roomtype_id,roomVM);
+            return Ok(room);
         }
         [HttpDelete("remove/{id}")]
         public IActionResult Remove(int id)

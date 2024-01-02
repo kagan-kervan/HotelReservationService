@@ -14,7 +14,7 @@ namespace HotelReservationService.Services
             this.dbContext = dbContext;
             this.tableRelationService = tableRelationService;
         }
-        public void AddRoom(int hotel_id, int roomtype_id, RoomVM room)
+        public Room AddRoom(int hotel_id, int roomtype_id, RoomVM room)
         {
             var tempRoom = new Room()
             {
@@ -25,6 +25,7 @@ namespace HotelReservationService.Services
             };
             dbContext.Rooms.Add(tempRoom);
             dbContext.SaveChanges();
+            return tempRoom;
         }
         public ICollection<Room> GetRooms(RoomControllerParameters roomParams)
         {

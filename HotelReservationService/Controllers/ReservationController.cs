@@ -21,31 +21,41 @@ namespace HotelReservationService.Controllers
         {
             ReservationControllerParams reservationControllerParams = new ReservationControllerParams( customerIDFilter, roomIDFilter, dateTime, pageIndex, pageSize);
             var list = reservationService.GetReservations(reservationControllerParams);
-            return Ok(list);
+            if(list.Any())
+                return Ok(list);
+            return NotFound();
         }
         [HttpGet("get/{id}")]
         public IActionResult Get(int id)
         {
             var reserv = reservationService.GetReservation(id);
-            return Ok(reserv);
+            if(reserv != null)
+                return Ok(reserv);
+            return NotFound();
         }
         [HttpGet("get-by-customerID/{customer_id}")]
         public IActionResult GetByCustomerID(int customer_id)
         {
             var reservs = reservationService.GetReservationsFromCustomerID(customer_id);
-            return Ok(reservs);
+            if(reservs.Any())
+                return Ok(reservs);
+            return NotFound();
         }
         [HttpGet("get-by-roomID/{room_id}")]
         public IActionResult GetByRoomID(int room_id)
         {
             var reservs = reservationService.GetReservationsFromRoomID(room_id);
-            return Ok(reservs);
+            if (reservs.Any())
+                return Ok(reservs);
+            return NotFound();
         }
         [HttpGet("get-by-reviewID/{review_id}")]
         public IActionResult GetByReviewID(int review_id)
         {
             var reserv = reservationService.GetReservationFromReviewId(review_id);
-            return Ok(reserv);
+            if (reserv.Any())
+                return Ok(reserv);
+            return NotFound();
         }
         [HttpPost("add/{room_id}/{customer_id}")]
         public IActionResult Post(int room_id,int customer_id, [FromBody]ReservationVM reservationVM) 

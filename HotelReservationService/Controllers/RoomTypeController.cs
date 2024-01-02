@@ -18,20 +18,24 @@ namespace HotelReservationService.Controllers
         public IActionResult GetAllRoomTypes()
         {
             var list =roomTypeService.GetRoomTypes();
-            return Ok(list);
+            if(list.Any())
+                 return Ok(list);
+            return NotFound();
 
         }
         [HttpGet("get/{id}")]
         public IActionResult GetRoomType(int id)
         {
             var type = roomTypeService.GetRoomTypeWithID(id);
-            return Ok(type);
+            if(type != null)
+                return Ok(type);
+            return NotFound();
         }
         [HttpPost("add")]
         public IActionResult AddRoomType([FromBody] RoomTypeVM roomType) 
         {
-            roomTypeService.AddRoomType(roomType);
-            return Ok();
+            var rmtype = roomTypeService.AddRoomType(roomType);
+            return Ok(rmtype);
         }
         [HttpDelete("delete/{id}")]
         public IActionResult Delete(int id)

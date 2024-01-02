@@ -26,11 +26,11 @@ namespace HotelReservationService.Controllers
             return Ok(rev);
         }
         [HttpPost("add")]
-        public IActionResult AddReview([FromBody]string comment, int rating)
+        public IActionResult AddReview(string comment, int rating)
         {
             DateTime date = DateTime.Now;
-            reviewService.AddReview(comment, rating, DateTime.Parse(date.ToString("d")));
-            return Ok();
+            var rev = reviewService.AddReview(comment, rating, DateTime.Parse(date.ToString("d")));
+            return Ok(rev);
         }
         [HttpPut("update/{id}")]
         public IActionResult UpdateReview(int id,string? comment,int?rating)

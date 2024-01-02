@@ -69,6 +69,7 @@ useEffect(() => {
                 <p>Total Rooms: {hotel.total_room_number}</p>
                 {/* Additional reservation details */}
                 <button className="remove-button" onClick={() => RemoveHotel(hotel.id)}>Remove Hotel</button>
+                <Link to={`/update-hotel/${hotel.id}`}><button className="update-button">Update</button></Link>
               </div>
             ))}
             <Link to={`/add-room/${ownerID}`}><button className="add-button">Add Room to Hotels</button></Link>
