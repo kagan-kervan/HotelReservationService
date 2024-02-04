@@ -1,21 +1,28 @@
 ﻿using HotelReservationService.Data.Models;
+using HotelReservationService.Data.ViewModels;
 
 namespace HotelReservationService.Services
 {
     public class ReviewService
     {
         private AppDBContext _dbContext;
-        public ReviewService(AppDBContext dbContext) {  _dbContext = dbContext; }
-        public Review AddReview(string desc, int score,DateTime reviewTime)
+        private readonly TableRelationService _tableRelationService;
+        public ReviewService(AppDBContext dbContext, TableRelationService tableRelationService)
+        {
+            _dbContext = dbContext; 
+            _tableRelationService = tableRelationService;
+        }
+        public Review AddReview(int reservID,ReviewVM reviewVM)
         {
             var rev = new Review()
             {
-                Rating = score,
-                Comment = desc,
-                Comment_Date = reviewTime,
+                Rating = reviewVM.Rating,
+                Comment = reviewVM.Comment,
+                Comment_Date = reviewVM.Comment_Date,
             };
             _dbContext.Reviews.Add(rev);
             _dbContext.SaveChanges();
+            _tableRelationService.AttachReviewToReservation(reservID, rev);
             return rev;
         }
         public ICollection<Review> GetReviews()
@@ -25,6 +32,8 @@ namespace HotelReservationService.Services
         }
         public Review GetReview(int id)
         {
+            if (id == 0)
+                return null;
             var rev = _dbContext.Reviews.SingleOrDefault( x => x.Id == id);
             return rev;
         }

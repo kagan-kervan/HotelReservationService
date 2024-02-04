@@ -14,6 +14,7 @@ import AddReservation from './add-reservation/AddReservation';
 import Customer from './customer/Customer';
 import GetOwner from './owner/Owner';
 import UpdateHotel from './hotel_page/UpdateHotel';
+import AddReview from './add-review/AddReview';
 
 class App extends React.Component{
    
@@ -37,6 +38,7 @@ class App extends React.Component{
                 <Route path='/customer-page/:customerID' element={<Customer/>} />
                 <Route path='/owner-page/:ownerID' element={<GetOwner/>} />
                 <Route path='/update-hotel/:hotelID' element={<UpdateHotel/>} />
+                <Route path='/add-review/:reservation_id' element={<AddReview/>} />
              </Routes>    
 
             </div>          

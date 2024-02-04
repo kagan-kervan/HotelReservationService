@@ -10,9 +10,11 @@ namespace HotelReservationService.Services
     public class ReservationService
     {
         private AppDBContext _dbContext;
-        public ReservationService(AppDBContext dbContext)
+        private readonly TableRelationService tableRelationService;
+        public ReservationService(AppDBContext dbContext, TableRelationService tableRelationService)
         {
             _dbContext = dbContext;
+            this.tableRelationService = tableRelationService;
         }
         public Reservation AddReservation(int room_id,int customer_id, ReservationVM reservationVM)
         {
@@ -26,6 +28,7 @@ namespace HotelReservationService.Services
             };
             _dbContext.Reservations.Add(reserv);
             _dbContext.SaveChanges();
+            tableRelationService.IncrementFullRoomNumberForHotel(room_id);
             return reserv;
         }
         public ICollection<Reservation> GetReservations(ReservationControllerParams reservationParams)
@@ -105,6 +108,8 @@ namespace HotelReservationService.Services
         public int GetReviewIDFromReservation(int id)
         {
             var res = _dbContext.Reservations.SingleOrDefault(re => re.Id == id);
+            if (res.ReviewId == null)
+                return 0;
             return (int)res.ReviewId;
         }
         public void RemoveReservation(int id)

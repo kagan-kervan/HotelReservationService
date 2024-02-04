@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ConnectingApps.SmartInject;
+using HotelReservationService.Data.Models;
 
 namespace HotelReservationService.Services
 {
@@ -99,6 +100,56 @@ namespace HotelReservationService.Services
         {
             featureService.Value.RemoveHotelFeaturesFromHotelID(hotel_id);
         }
+
+        public void AttachReviewToReservation(int reservation_id, Review review)
+        {
+            reservationService.Value.PutReviewToReservation(reservation_id, review);
+            var room = roomService.Value.GetRoom((int)reservationService.Value.GetReservation(reservation_id).RoomId);
+            if (room != null)
+                UpdateHotelReviewScore((int)room.HotelId);
+        }
+
+        public void UpdateHotelReviewScore(int hotel_id)
+        {
+            var hotel = hotelService.Value.GetHotel(hotel_id);
+            var score = hotel.overall_score == null ? 0 : hotel.overall_score;
+            var rooms = roomService.Value.GetRoomsFromHotelID(hotel_id);
+            // Get through each room.
+            foreach (var room in rooms)
+            {
+                // Take all of their reservations.
+                var reservs = reservationService.Value.GetReservationsFromRoomID(room.Id);
+                foreach (var reservation in reservs)
+                {
+                    
+                    var review = reviewService.Value.GetReview(reservationService.Value.GetReviewIDFromReservation(reservation.Id));
+                    if (review != null)
+                    {
+                        score = score + review.Rating;
+                    }
+                }
+                // Calculate the average score
+                if (reservs.Count > 0)
+                {
+                    score /= reservs.Count;
+                }
+            }
+            score = score / rooms.Count;
+            hotelService.Value.UpdateHotelScore(hotel.Id, (float)score);
+        }
+        public void UpdateTotalRoomNumberForHotel(int hotel_id)
+        {
+            hotelService.Value.IncrementTotalRoomNum(hotel_id);
+        }
+        public void IncrementFullRoomNumberForHotel(int room_id)
+        {
+            var hotel = roomService.Value.GetRoom(room_id).HotelId;
+            if(hotel != null)
+            {
+                hotelService.Value.IncrementFullRoomNum((int)hotel);
+            }
+        }
+
     }
 
 }

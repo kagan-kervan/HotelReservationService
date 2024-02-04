@@ -1,4 +1,5 @@
-﻿using HotelReservationService.Services;
+﻿using HotelReservationService.Data.ViewModels;
+using HotelReservationService.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,11 +26,11 @@ namespace HotelReservationService.Controllers
             var rev = reviewService.GetReview(id);
             return Ok(rev);
         }
-        [HttpPost("add")]
-        public IActionResult AddReview(string comment, int rating)
+        [HttpPost("add/{reserv_id}")]
+        public IActionResult AddReview(int reserv_id, [FromBody] ReviewVM reviewVM)
         {
             DateTime date = DateTime.Now;
-            var rev = reviewService.AddReview(comment, rating, DateTime.Parse(date.ToString("d")));
+            var rev = reviewService.AddReview(reserv_id,reviewVM);
             return Ok(rev);
         }
         [HttpPut("update/{id}")]

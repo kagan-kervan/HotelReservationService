@@ -22,8 +22,9 @@ namespace HotelReservationService.Services
                 HotelOwnerId = owner_id,
                 HotelAddressId = address_id,
                 HotelName = hotelVM.HotelName,
-                total_room_number = hotelVM.total_room_number,
-                full_room_number = (int?)hotelVM.full_room_number
+                total_room_number = 0,
+                full_room_number = 0,
+                overall_score = 0,
             };
             dbContext.Hotels.Add(newHotel);
             dbContext.SaveChanges();
@@ -116,9 +117,9 @@ namespace HotelReservationService.Services
             if (hotel != null)
             {
                 hotel.HotelName = hotelModel.HotelName;
-                hotel.total_room_number=hotelModel.total_room_number;
-                hotel.full_room_number = hotelModel.full_room_number;
-                hotel.overall_score = hotelModel.overall_score;
+                hotel.total_room_number = 0;
+                hotel.full_room_number = 0;
+                hotel.overall_score = 0;
             }
             dbContext.SaveChanges() ;
             return hotel;
@@ -142,6 +143,45 @@ namespace HotelReservationService.Services
                 dbContext.SaveChanges();
             }
             return hotel;
+        }
+
+        public Hotel UpdateHotelScore(int id, float new_score)
+        {
+            var hotel = dbContext.Hotels.Find(id); 
+            if(hotel != null)
+            {
+                hotel.overall_score = new_score;
+                dbContext.SaveChanges();
+            }
+            return hotel;
+        }
+
+        public void IncrementTotalRoomNum(int hotel_id)
+        {
+            var hotel = dbContext.Hotels.SingleOrDefault( x => x.Id == hotel_id );
+            if(hotel != null)
+            {
+                hotel.total_room_number =  hotel.total_room_number + 1;
+            }
+            dbContext.SaveChanges();
+        }
+        public void IncrementFullRoomNum(int hotel_id)
+        {
+            var hotel = dbContext.Hotels.SingleOrDefault(x => x.Id == hotel_id);
+            if (hotel != null)
+            {
+                hotel.full_room_number = hotel.full_room_number + 1;
+            }
+            dbContext.SaveChanges();
+        }
+        public void DecrementFullRoomNum(int hotel_id)
+        {
+            var hotel = dbContext.Hotels.SingleOrDefault(x => x.Id == hotel_id);
+            if (hotel != null)
+            {
+                hotel.full_room_number = hotel.full_room_number - 1;
+            }
+            dbContext.SaveChanges();
         }
     }
 }

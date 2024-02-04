@@ -68,6 +68,9 @@ return (
             <p>Check-Out Date: {new Date(reservation.checkOutDate).toLocaleString('en-UK', { year: 'numeric', month: 'numeric', day: 'numeric'})}</p>
             <p>Total Guests: {reservation.total_Guest_Number}</p>
             {/* Additional reservation details */}
+            <Link to={`/add-review/${reservation.id}`}>
+              <button className="review-button">Add Review</button>
+            </Link>
             <button className="remove-button" onClick={() => RemoveReservation(reservation.id)}>Remove Reservation</button>
           </div>
         ))}

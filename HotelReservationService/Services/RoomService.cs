@@ -25,6 +25,7 @@ namespace HotelReservationService.Services
             };
             dbContext.Rooms.Add(tempRoom);
             dbContext.SaveChanges();
+            tableRelationService.UpdateTotalRoomNumberForHotel(hotel_id);
             return tempRoom;
         }
         public ICollection<Room> GetRooms(RoomControllerParameters roomParams)

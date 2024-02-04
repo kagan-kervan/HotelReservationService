@@ -41,7 +41,9 @@ const Login = () => {
           alert('Incorrect email or password.');
         }
         if(response == 200){
-          alert('successfullly logged in.');
+          alert('Login Successfully!');
+          history('/customer-page/'+data.id);
+          setLoggedin(true);
         }
       } 
       catch (error) {
