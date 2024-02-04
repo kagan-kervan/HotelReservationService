@@ -15,6 +15,11 @@
     <PackageReference Include="ConnectingApps.SmartInject" Version="2.0.2" />
     <PackageReference Include="EntityFrameworkCore.UseRowNumberForPaging" Version="0.5.0" />
     <PackageReference Include="JavaScriptEngineSwitcher.Extensions.MsDependencyInjection" Version="3.19.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.23" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.23" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.23" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.23.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
@@ -28,6 +33,7 @@
     <PackageReference Include="React.AspNet" Version="5.2.12" />
     <PackageReference Include="JavaScriptEngineSwitcher.V8" Version="3.10.0" />
     <PackageReference Include="JavaScriptEngineSwitcher.V8.Native.win-x64" Version="3.10.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.23.0" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="$(SpaRoot)**" />

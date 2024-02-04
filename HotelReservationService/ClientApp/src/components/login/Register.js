@@ -11,34 +11,68 @@ export const Register = (props) => {
     const [phone, setPhone] = useState('');
     const [accountType, setAccountType] = useState('customer');
 
-    const handleSubmit = (e) => {
+    
+    const isValidPhoneNumber = (value) => {
+      // Simple regex for validating a numeric phone number with optional spaces, dashes, or parentheses
+      const phoneRegex = /^[0-9\s\-()+]+$/;
+      return phoneRegex.test(value);
+  };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(name);
         console.log(surname);
         console.log(email);
         console.log(phone);
         console.log(pass);
-        console.log(e);
+        if (!isValidPhoneNumber(phone)) {
+          alert('Please enter a valid phone number.');
+          return;
+      }
         if(accountType == 'customer'){
-
-            axios.post("https://localhost:3000/api/Customer/add-customer",
+          try{
+            
+            const response = await axios.post("https://localhost:3000/api/Customer/add-customer",
             {
                "name": name,
                "surname": surname,
                "email_Address": email,
                "password": pass,
                "phone": phone
-            }).then(response => {console.log(response.data)}).catch(error => {console.error("error postin",error)});
+            });
+            //console.log(response);
+            if(response.status == 200){
+              alert('Successfully created user!');
+            }
+            else if(response.status == 400)
+              alert('Invalid email or password');
+          } catch (error) {
+            console.error('Error making the request:', error);
+            alert('Invalid email or password.');
+            // Handle other errors if needed
+        }
         }
         else{
-            axios.post("https://localhost:3000/api/Owner/add",
+          try{
+            const response = await axios.post("https://localhost:3000/api/Owner/add",
             {
                "name": name,
                "surname": surname,
                "email_Address": email,
                "password": pass,
                "phone": phone
-            }).then(response => {console.log(response.data)}).catch(error => {console.error("error postin",error)});
+            });
+            
+            if(response.status == 200){
+              alert("Successfully created user!");
+            }
+            else if(response.status == 500)
+              alert("Invalid email or password");
+          } catch (error) {
+            console.error('Error making the request:', error);
+            alert('Invalid email or password.');
+            // Handle other errors if needed
+        }
         }
     }
 
@@ -53,7 +87,16 @@ export const Register = (props) => {
             <label htmlFor="email">Email</label>
             <input value={email} onChange={(e) => setEmail(e.target.value)}type="email" placeholder="youremail@gmail.com" id="email" name="email" />
             <label htmlFor="phone">PhoneNumber</label>
-            <input value={phone} phone="phone" onChange={(e) => setPhone(e.target.value)} id="phone" placeholder="Phone" />
+            <input
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    type="text" // Use text type to allow numeric characters
+                    pattern="[0-9\s\-()+]*" // Allow only numeric characters, spaces, dashes, and parentheses
+                    placeholder="Phone"
+                    id="phone"
+                    name="phone"
+                    required
+                />
             <label htmlFor="password">Password</label>
             <input value={pass} onChange={(e) => setPass(e.target.value)} type="password" placeholder="********" id="password" name="password" />
             <label>

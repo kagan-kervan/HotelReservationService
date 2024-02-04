@@ -11,8 +11,9 @@ namespace HotelReservationService.Services
         private readonly Lazy<RoomService> roomService;
         private readonly Lazy<AddressService> addressService;
         private readonly Lazy<HotelFeaturesService> featureService;
+        private readonly Lazy<ReviewService> reviewService;
         public TableRelationService(Lazy<ReservationService> reservationService, Lazy<HotelService> hotelService, 
-           Lazy<OwnerService> ownerService, Lazy<RoomService> roomService, Lazy<AddressService> address, Lazy<HotelFeaturesService> featureService)
+           Lazy<OwnerService> ownerService, Lazy<RoomService> roomService, Lazy<AddressService> address, Lazy<HotelFeaturesService> featureService, Lazy<ReviewService> reviewService)
         {
             this.reservationService = reservationService;
             this.hotelService = hotelService;
@@ -20,6 +21,7 @@ namespace HotelReservationService.Services
             this.roomService = roomService;
             this.addressService = address;
             this.featureService = featureService;
+            this.reviewService = reviewService;
         }
 
         //Checks if the owner has any hotel in hotel service class.

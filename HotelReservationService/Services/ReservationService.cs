@@ -101,6 +101,12 @@ namespace HotelReservationService.Services
             reserv.Review = review;
             _dbContext.SaveChanges();
         }
+
+        public int GetReviewIDFromReservation(int id)
+        {
+            var res = _dbContext.Reservations.SingleOrDefault(re => re.Id == id);
+            return (int)res.ReviewId;
+        }
         public void RemoveReservation(int id)
         {
             var reserv = _dbContext.Reservations.Find(id);

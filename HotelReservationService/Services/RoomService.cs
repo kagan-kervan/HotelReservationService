@@ -73,7 +73,8 @@ namespace HotelReservationService.Services
             query = query.Where(x => x.HotelId == hotel_id);
             query = query.Include(h => h.Hotel).Include(r => r.RoomType);
             return query.ToList();
-        }public ICollection<Room> GetReservedRoomsFromHotelID(int hotel_id,DateTime? checkin,DateTime? checkout)
+        }
+        public ICollection<Room> GetReservedRoomsFromHotelID(int hotel_id,DateTime? checkin,DateTime? checkout)
         {
             IQueryable<Room> query = dbContext.Rooms;
             query = query.Where(x => x.HotelId == hotel_id);

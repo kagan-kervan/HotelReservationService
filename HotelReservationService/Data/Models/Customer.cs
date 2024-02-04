@@ -1,4 +1,6 @@
-﻿namespace HotelReservationService.Data.Models
+﻿using HotelReservationService.Data.Identity;
+
+namespace HotelReservationService.Data.Models
 {
     public class Customer
     {
@@ -8,5 +10,6 @@
         public string Email_Address { get; set; }
         public string Password { get; set;}
         public string Phone { get; set; }
+        public ApplicationCustomer ApplicationCustomer { get; set; }
     }
 }

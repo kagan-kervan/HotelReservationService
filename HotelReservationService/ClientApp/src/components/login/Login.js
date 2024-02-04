@@ -29,33 +29,27 @@ const Login = () => {
   const [accountPassword, setaccountPassword] = useState('');
   const [isLoggedIn, setLoggedin] = useState(false);
 
-  const handleLoginCustomer = () => {
+  const handleLoginCustomer = async () => {
     // Burada gerçek bir kimlik doğrulama işlemi gerçekleştirilebilir.
     // // // Ancak bu örnek için sadece kullanıcı adı ve şifre kontrolü yapılıyor.
     if(accountType == 'customer'){
-      axios.get("https://localhost:3000/api/Customer/get-customer?email="+username,{
-        timeout: 10000,
-      })
-      .then(response =>
-        response.data
-      ).then((data) => {
-        console.log(data);   // Check if the necessary properties exist before accessing them
-        setUserDetails(data);
-        console.log(data)
-          setaccountPassword(data.password);
-          // If account password is working.
-          if (password === data.password) {
-            alert('Login Successfully!');
-            history('/customer-page/'+data.id);
-            setLoggedin(true);
-          } else {
-            alert('Kullanıcı adı veya şifre hatalı!');
-          }
+      try{
+        const response = await axios.post("https://localhost:3000/api/Auth/login/customer?email="+username+"&password="+password,{
+          timeout: 10000,
+        });
+        if(response == 400){
+          alert('Incorrect email or password.');
         }
-      ).catch(error => {
-        console.error('Error fetching customer data:', error);
-        // Handle error as needed
-      });
+        if(response == 200){
+          alert('successfullly logged in.');
+        }
+      } 
+      catch (error) {
+        console.error('Error making the request:', error);
+        alert('Invalid email or password.');
+        // Handle other errors if needed
+    }
+
     }
     else{ 
     axios.get("https://localhost:3000/api/Owner/get-with-mail?email="+username,{

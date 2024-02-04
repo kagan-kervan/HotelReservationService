@@ -7,7 +7,9 @@ using JavaScriptEngineSwitcher.V8;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using React.AspNet;
 using EntityFrameworkCore.UseRowNumberForPaging;
-
+using Microsoft.AspNetCore.Authentication.Cookies;
+using HotelReservationService.Data.Identity;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +26,16 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDBContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnectionString"), o => o.UseRowNumberForPaging()));
+builder.Services.AddIdentityCore<ApplicationCustomer>()
+    .AddEntityFrameworkStores<AppDBContext>()
+    .AddDefaultTokenProviders();
+builder.Services.AddIdentityCore<ApplicationOwner>()
+    .AddEntityFrameworkStores<AppDBContext>()
+    .AddDefaultTokenProviders();
+builder.Services.AddScoped<SignInManager<ApplicationOwner>, SignInManager<ApplicationOwner>>();
+builder.Services.AddScoped<SignInManager<ApplicationCustomer>, SignInManager<ApplicationCustomer>>();
+builder.Services.AddScoped<UserManager<ApplicationOwner>, UserManager<ApplicationOwner>>();
+builder.Services.AddScoped<UserManager<ApplicationCustomer>, UserManager<ApplicationCustomer>>();
 builder.Services.AddTransient<CustomerService>();
 builder.Services.AddLazyTransient<CustomerService, CustomerService>();
 builder.Services.AddTransient<AddressService>();
@@ -40,6 +52,7 @@ builder.Services.AddLazyTransient<ReservationService, ReservationService>();
 builder.Services.AddTransient<OwnerService>();
 builder.Services.AddLazyTransient<OwnerService, OwnerService>();
 builder.Services.AddTransient<ReviewService>();
+builder.Services.AddLazyTransient<ReviewService, ReviewService>();
 builder.Services.AddTransient<PictureService>();
 builder.Services.AddScoped<TableRelationService>();
 builder.Services.AddCors(opt =>
@@ -49,6 +62,15 @@ builder.Services.AddCors(opt =>
         policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
     });
 });
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+{
+    options.Cookie.Name = "HotelService.Auth";
+    options.LoginPath = "/login/";
+    options.AccessDeniedPath = "/login/";
+});
+
+
 var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -75,6 +97,7 @@ app.UseReact(config =>
 
 app.UseStaticFiles();
 app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 AppDBInitializer.Seed(app);
 

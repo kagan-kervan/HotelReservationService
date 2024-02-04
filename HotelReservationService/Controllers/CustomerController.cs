@@ -15,10 +15,22 @@ namespace HotelReservationService.Controllers
             this.customerService = customerService;
         }
         [HttpPost("add-customer")]
-        public IActionResult AddCustomer([FromBody]CustomerVM customerVM)
+        public async Task<IActionResult> AddCustomer([FromBody]CustomerVM customerVM)
         {
-            var cust = customerService.AddCustomer(customerVM);
-            return Ok(cust);
+            try
+            {
+                var cust = await customerService.AddCustomerAsync(customerVM);
+                if (cust == null)
+                {
+                    return StatusCode(500);
+                }
+                return Ok(cust);
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions and return an appropriate error response
+                return StatusCode(500, "An error occurred while adding the customer.");
+            }
         }
         [HttpGet("get/all")]
         public IActionResult GetAllCustomers()

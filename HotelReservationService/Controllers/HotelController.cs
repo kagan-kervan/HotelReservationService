@@ -1,6 +1,7 @@
 ﻿using HotelReservationService.Data.ViewModels;
 using HotelReservationService.Services;
 using HotelReservationService.Services.Params;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

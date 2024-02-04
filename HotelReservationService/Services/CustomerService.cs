@@ -4,6 +4,8 @@ using Microsoft.CodeAnalysis;
 using System.Net.Http;
 using System.Net.Mail;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using HotelReservationService.Data.Identity;
 
 namespace HotelReservationService.Services
 {
@@ -11,41 +13,66 @@ namespace HotelReservationService.Services
     {
         AppDBContext dbContext;
         TableRelationService tableRelationService;
-        public CustomerService(AppDBContext dbContext, TableRelationService tableRelationService)
+        private readonly UserManager<ApplicationCustomer> userManager;
+        public CustomerService(AppDBContext dbContext, TableRelationService tableRelationService, UserManager<ApplicationCustomer> userManager)
         {
             this.dbContext = dbContext;
             this.tableRelationService = tableRelationService;
+            this.userManager = userManager;
         }
 
-        public Customer AddCustomer(CustomerVM customer)
+        public async Task<Customer> AddCustomerAsync(CustomerVM customer)
         {
-            var newCustomer = new Customer()
+            string display = customer.Name + " " + customer.Surname;
+            var newUser = new ApplicationCustomer
             {
-                Name = customer.Name,
-                Surname = customer.Surname,
-                Email_Address = customer.Email_Address,
-                Password = customer.Password,
-                Phone = customer.Phone,
+                DisplayName = display,
+                Email = customer.Email_Address,
+                UserName = customer.Email_Address,
+                PhoneNumber = customer.Phone,
             };
-            dbContext.Add(newCustomer);
-            dbContext.SaveChanges();
-            return newCustomer;
-        }
 
+            var result = await userManager.CreateAsync(newUser, customer.Password);
+
+            if (result.Succeeded)
+            {
+                var newCustomer = new Customer
+                {
+                    Name = customer.Name,
+                    Surname = customer.Surname,
+                    Email_Address = customer.Email_Address,
+                    Phone = customer.Phone,
+                    Password = customer.Password,
+                    ApplicationCustomer = newUser,
+                };
+
+                dbContext.Add(newCustomer);
+                dbContext.SaveChanges();
+
+                return newCustomer;
+            }
+            else
+            {
+                // Handle the case where user creation failed
+                // ...
+
+                return null;
+            }
+        }
         public ICollection<Customer> GetAllCustomers()
         {
-            var AllCustomers = dbContext.Customers.ToList();
+            var AllCustomers = dbContext.Customers.Include(o => o.ApplicationCustomer).ToList();
             return AllCustomers;
         }
 
         public Customer GetCustomerByID(int id) 
         {
             //Change because if cant find returns null instead of excaption.
-            return dbContext.Customers.FirstOrDefault(x => x.Id == id);
+            return dbContext.Customers.Include(o => o.ApplicationCustomer).FirstOrDefault(x => x.Id == id);
         }
         public Customer UpdateCustoemrByID(int id, CustomerVM updatedCustomer)
         {
-           var customer = dbContext.Customers.FirstOrDefault(n => n.Id == id);
+           var customer = dbContext.Customers.Include(o => o.ApplicationCustomer).FirstOrDefault(n => n.Id == id);
             if(customer != null)
             {
                 customer.Name = updatedCustomer.Name;
@@ -77,7 +104,7 @@ namespace HotelReservationService.Services
         {
             IQueryable<Customer> customers = dbContext.Customers;
             customers = customers.Where(x => x.Email_Address == mail);
-            return customers.SingleOrDefault();
+            return customers.Include(o => o.ApplicationCustomer).SingleOrDefault();
         }
     }
 }

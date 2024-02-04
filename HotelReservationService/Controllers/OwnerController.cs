@@ -39,10 +39,20 @@ namespace HotelReservationService.Controllers
             return NotFound();
         }
         [HttpPost("add")]
-        public IActionResult AddOwner([FromBody] OwnerVM ownerVM)
+        public async Task<IActionResult> AddOwner([FromBody] OwnerVM ownerVM)
         {
-            var own = ownerService.AddOwner(ownerVM);
-            return Ok(own);
+            try
+            {
+                var own = await ownerService.AddOwnerAsync(ownerVM);
+                if (own == null)
+                    return StatusCode(500);
+                return Ok(own);
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions and return an appropriate error response
+                return StatusCode(500, "An error occurred while adding the customer.");
+            }
         }
         [HttpPut("update/{id}")]
         public IActionResult UpdateOwner(int id, [FromBody] OwnerVM ownerVM)
